@@ -8,13 +8,14 @@ initialBoard([
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell],
   [white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
 
-
-drawBoard([]) :-
-	drawHorizontalSeparator, nl.
-drawBoard([Line | Remainder]) :-
+drawBoard([], _) :-
 	drawHorizontalSeparator, nl,
+	write('    a    b    c    d    e    f    g    h'), nl.
+drawBoard([Line | Remainder], LineNumber) :-
+	drawHorizontalSeparator, nl,
+	write(LineNumber), NextLineNumber is LineNumber - 1,
 	drawLine(Line), drawVerticalSeparator, nl,
-	drawBoard(Remainder).
+	drawBoard(Remainder, NextLineNumber).
 
 drawLine([]).
 drawLine([Cell | Remainder]) :-
@@ -29,10 +30,11 @@ drawCell(white_dux)		:- write('WD').
 drawCell(empty_cell)	:- write('  ').
 
 drawHorizontalSeparator :-
-	write('  ---------------------------------------').
+	write('   ---------------------------------------').
 drawVerticalSeparator :-
 	write(' | ').
 
 drawInitialBoard :-
 	initialBoard(Board),
-	drawBoard(Board).
+	LineNumber is 8,
+	drawBoard(Board, LineNumber).
