@@ -1,4 +1,4 @@
-initialBoard :- [
+initialBoard([
 	[black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
 	[empty_cell, empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
@@ -6,11 +6,11 @@ initialBoard :- [
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell],
-    [white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]].
+  [white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
 
 
 drawBoard([]).
-drawBoard([Line | Remainder]) :- 
+drawBoard([Line | Remainder]) :-
 	write(' ________________________________________'), nl,
 	drawLine(Line), nl,
 	drawBoard(Remainder).
@@ -27,6 +27,6 @@ drawCell(black_dux)		:- write('BD').
 drawCell(white_dux)		:- write('WD').
 drawCell(empty_cell)	:- write('  ').
 
-drawInitialBoard :- 
+drawInitialBoard :-
 	initialBoard(Board),
 	drawBoard(Board).
