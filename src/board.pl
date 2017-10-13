@@ -36,16 +36,17 @@ drawHorizontalSeparator :-
 drawVerticalSeparator :-
 	write(' | ').
 
+
+/** Test purposes **/
 drawInitialBoard :-
 	initialBoard(Board),
 	LineNumber is 8,
 	drawBoard(Board, LineNumber).
-
 testMove :-
 	drawInitialBoard,
 	initialBoard(Board),
 	Xi is 0, Yi is 0,
-	Xf is 1, Yf is 1,
+	Xf is 0, Yf is 1,
 	move(Board, Xi, Yi, Xf, Yf, NewBoard),
 	LineNumber is 8,
 	drawBoard(NewBoard, LineNumber).

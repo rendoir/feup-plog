@@ -1,16 +1,54 @@
 :-include('utils.pl').
 
-/**isValidMove(Board, Xi, Yi, Xf, Yf).		%! Checks if the move from (Xi, Yi) to (Xf, Yf) can be done based on the set of rules of the game.
 
-isInsideBoard(X, Y).				          %! Checks if the 2D point (X,Y) is inside the board.
+/**
+ * Checks if the move from (Xi, Yi) to (Xf, Yf) can be done based on the set of rules of the game.
+ **/
+isValidMove(Xi, Yi, Xf, Yf) :-
+  %! Check if the move is orthogonal
+  Xi = Xf ; Yi = Yf.
 
-isEmptyCell(Board, X, Y).					    %! Checks if the cell (X,Y) is set with an empty cell atom.
-**/
+
+/**
+ * Checks if the 2D point (X,Y) is inside the board.
+ **/
+isInsideBoard(X, Y) :-
+  X >= 0, X =< 7,
+  Y >= 0, Y =< 7. 				          
+
+
+/** 
+ * Checks if the cell is set with an empty cell atom.
+ **/
+isEmptyCell(empty_cell).					    
+
+
 /**
  * Moves a piece from (Xi, Yi) to (Xf, Yf). This substitutes (Xf, Yf) with the cell atom from (Xi, Yi) and sets (Xi, Yi) with the empty cell atom.
-**/
-move(Board, Xi, Yi, Xf, Yf, NewBoard) :-
-  getListElement(Yi, Board, Row),
-  getListElement(Xi, Row, ElementToMove),
-  setListElement(Xf, ElementToMove, Row, NewRow),
-  setListElement(Yf, NewRow, Board, NewBoard).
+ **/
+move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
+  %!Check if both cells belong to the board
+  isInsideBoard(Xi, Yi),
+  isInsideBoard(Xf, Yf),
+
+  %! Get the element that will be moved
+  getListElement(Yi, Board, FromRow),
+  getListElement(Xi, FromRow, ElementToMove),
+
+  %! Get the row to where it will be moved
+  getListElement(Yf, Board, ToRow),
+
+  %! Get the cell to where it will be moved and check if it is empty
+  getListElement(Xf, ToRow, ToCell),
+  isEmptyCell(ToCell),
+
+  %!Check if the move would be a valid one
+  isValidMove(Xi, Yi, Xf, Yf),
+
+  %! Replace the empty cell with the element that was moved
+  setListElement(Xf, ElementToMove, ToRow, NewToRow),
+  setListElement(Yf, NewToRow, Board, NewBoard),
+
+  %! Replace the cell the element moved from with an empty cell
+  setListElement(Xi, empty_cell, FromRow, NewFromRow),
+  setListElement(Yi, NewFromRow, NewBoard, FinalBoard).
