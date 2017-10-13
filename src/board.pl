@@ -2,12 +2,12 @@
 
 initialBoard([
 	[black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
-	[empty_cell, empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell],
   [white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
 
 drawBoard([], _) :-
@@ -40,13 +40,11 @@ drawVerticalSeparator :-
 /** Test purposes **/
 drawInitialBoard :-
 	initialBoard(Board),
-	LineNumber is 8,
-	drawBoard(Board, LineNumber).
+	drawBoard(Board, 8).
 testMove :-
 	drawInitialBoard,
 	initialBoard(Board),
 	Xi is 0, Yi is 0,
 	Xf is 0, Yf is 1,
 	move(Board, Xi, Yi, Xf, Yf, NewBoard),
-	LineNumber is 8,
-	drawBoard(NewBoard, LineNumber).
+	drawBoard(NewBoard, 8).

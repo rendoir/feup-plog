@@ -2,9 +2,16 @@
 
 
 /**
- * Checks if the move from (Xi, Yi) to (Xf, Yf) can be done based on the set of rules of the game.
+ * Checks if there is an element between (Xi, Yi) and (Xf, Yf). 
+ * In Latrunculi, pieces cannot jump over other pieces.
  **/
-isValidMove(Xi, Yi, Xf, Yf) :-
+%! isElementBetween(Board, Xi, Yi, Xf, Yf).
+
+
+/**
+ * Checks if the move is orthogonal.
+ **/
+isOrthogonal(Xi, Yi, Xf, Yf) :-
   %! Check if the move is orthogonal
   Xi = Xf ; Yi = Yf.
 
@@ -27,7 +34,7 @@ isEmptyCell(empty_cell).
  * Moves a piece from (Xi, Yi) to (Xf, Yf). This substitutes (Xf, Yf) with the cell atom from (Xi, Yi) and sets (Xi, Yi) with the empty cell atom.
  **/
 move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
-  %!Check if both cells belong to the board
+  % !Check if both cells belong to the board
   isInsideBoard(Xi, Yi),
   isInsideBoard(Xf, Yf),
 
@@ -42,8 +49,8 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   getListElement(Xf, ToRow, ToCell),
   isEmptyCell(ToCell),
 
-  %!Check if the move would be a valid one
-  isValidMove(Xi, Yi, Xf, Yf),
+  % !Check if the move would be orthogonal
+  isOrthogonal(Xi, Yi, Xf, Yf),
 
   %! Replace the empty cell with the element that was moved
   setListElement(Xf, ElementToMove, ToRow, NewToRow),
