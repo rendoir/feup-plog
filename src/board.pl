@@ -9,15 +9,16 @@ initialBoard([
   [white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
 
 
-drawBoard([]).
+drawBoard([]) :-
+	drawHorizontalSeparator, nl.
 drawBoard([Line | Remainder]) :-
-	write(' ________________________________________'), nl,
-	drawLine(Line), nl,
+	drawHorizontalSeparator, nl,
+	drawLine(Line), drawVerticalSeparator, nl,
 	drawBoard(Remainder).
 
 drawLine([]).
 drawLine([Cell | Remainder]) :-
-	write(' | '),
+	drawVerticalSeparator,
 	drawCell(Cell),
 	drawLine(Remainder).
 
@@ -26,6 +27,11 @@ drawCell(white_soldier) :- write('WS').
 drawCell(black_dux)		:- write('BD').
 drawCell(white_dux)		:- write('WD').
 drawCell(empty_cell)	:- write('  ').
+
+drawHorizontalSeparator :-
+	write('  ---------------------------------------').
+drawVerticalSeparator :-
+	write(' | ').
 
 drawInitialBoard :-
 	initialBoard(Board),
