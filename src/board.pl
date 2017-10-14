@@ -1,30 +1,31 @@
 
+:- include('moves.pl').
+
+
 % [--------------------]
 % [----Board Desgin----]
 % [--------------------]
 
 boardtopline(
-	[boxlight_down_and_right, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_down, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_down,
+	[empty_cell,boxlight_down_and_right, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_down, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_down,
 	 boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_down, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_down, boxlight_horizontal, boxlight_horizontal, 
 	 boxlight_horizontal_and_down, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_down, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_down, 
 	 boxlight_horizontal, boxlight_horizontal, boxlight_down_and_left]
 ).
 
 boardmiddleline(
-	[boxlight_vertical_and_right, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_vertical, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_vertical,
+	[empty_cell,boxlight_vertical_and_right, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_vertical, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_vertical,
 	boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_vertical, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_vertical,
 	boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_vertical, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_vertical,
 	boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_vertical, boxlight_horizontal, boxlight_horizontal, boxlight_vertical_and_left]
 ).
 
 boardbuttomline(
-	[boxlight_up_and_right, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_up, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_up,
+	[empty_cell,boxlight_up_and_right, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_up, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_up,
 	boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_up, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_up,
 	boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_up, boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_up,
 	boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_up, boxlight_horizontal, boxlight_horizontal, boxlight_up_and_left]
 ).
-
-:- include('moves.pl').
 
 initialBoard([
 	[black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
@@ -36,29 +37,29 @@ initialBoard([
 	[empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell],
   [white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
 
-drawBoard([], _) :-
-	drawHorizontalSeparator, nl,
-	write('    a    b    c    d    e    f    g    h'), nl.
-drawBoard([Line | Remainder], LineNumber) :-
-	drawHorizontalSeparator, nl,
-	write(LineNumber), NextLineNumber is LineNumber - 1,
-	drawLine(Line), drawVerticalSeparator, nl,
-	drawBoard(Remainder, NextLineNumber).
-
 % [--------------------]
 % [-----Draw Board-----]
 % [--------------------]
 
 drawBoard([Line | Remainder]) :-
+	boardtopline(TopLine),
+	drawBoardLine(TopLine), nl,
+	write(8), write(' '), 
+	NextLineNumber is 7,
 	drawLine(Line), drawCell(boxlight_vertical), nl,
-	drawBoardRest(Remainder).
+	drawBoardRest(Remainder, NextLineNumber),
+	boardbuttomline(ButtomLine),
+	drawBoardLine(ButtomLine), nl,
+	write('   a  b  c  d  e  f  g  h'), nl.
 
-drawBoardRest([]).
-drawBoardRest([Line | Remainder]) :-
+drawBoardRest([], _).
+drawBoardRest([Line | Remainder], LineNumber) :-
 	boardmiddleline(X),
 	drawBoardLine(X), nl,
+	write(LineNumber), write(' '),  
+	NextLineNumber is LineNumber - 1,
 	drawLine(Line), drawCell(boxlight_vertical), nl,
-	drawBoardRest(Remainder).
+	drawBoardRest(Remainder, NextLineNumber).
 
 drawLine([]).
 drawLine([Cell | Remainder]) :-
@@ -90,14 +91,12 @@ drawCell(boxlight_vertical_and_left) 	:- put_code(9508).
 
 
 drawInitialBoard :-
-	boardtopline(TopLine),
-	drawBoardLine(TopLine), nl,
 	initialBoard(Board),
-	drawBoard(Board, 8).
+	drawBoard(Board).
 testMove :-
 	drawInitialBoard,
 	initialBoard(Board),
 	Xi is 0, Yi is 0,
 	Xf is 0, Yf is 1,
 	move(Board, Xi, Yi, Xf, Yf, NewBoard),
-	drawBoard(NewBoard, 8).
+	drawBoard(NewBoard).
