@@ -24,16 +24,26 @@ boardbuttomline(
 	boxlight_horizontal, boxlight_horizontal, boxlight_horizontal_and_up, boxlight_horizontal, boxlight_horizontal, boxlight_up_and_left]
 ).
 
+:- include('moves.pl').
+
 initialBoard([
 	[black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
-	[empty_cell, empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell],
-	[white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
+	[empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell],
+  [white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
 
+drawBoard([], _) :-
+	drawHorizontalSeparator, nl,
+	write('    a    b    c    d    e    f    g    h'), nl.
+drawBoard([Line | Remainder], LineNumber) :-
+	drawHorizontalSeparator, nl,
+	write(LineNumber), NextLineNumber is LineNumber - 1,
+	drawLine(Line), drawVerticalSeparator, nl,
+	drawBoard(Remainder, NextLineNumber).
 
 % [--------------------]
 % [-----Draw Board-----]
@@ -83,6 +93,11 @@ drawInitialBoard :-
 	boardtopline(TopLine),
 	drawBoardLine(TopLine), nl,
 	initialBoard(Board),
-	drawBoard(Board),
-	boardbuttomline(ButtomLine),
-	drawBoardLine(ButtomLine), nl.
+	drawBoard(Board, 8).
+testMove :-
+	drawInitialBoard,
+	initialBoard(Board),
+	Xi is 0, Yi is 0,
+	Xf is 0, Yf is 1,
+	move(Board, Xi, Yi, Xf, Yf, NewBoard),
+	drawBoard(NewBoard, 8).
