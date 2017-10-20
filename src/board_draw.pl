@@ -51,6 +51,10 @@ testMove :-
 	drawInitialBoard,
 	initialBoard(Board),
 	Xi is 0, Yi is 0,
-	Xf is 0, Yf is 1,
+	Xf is 0, Yf is 2,
 	move(Board, Xi, Yi, Xf, Yf, NewBoard),
-	drawBoard(NewBoard).
+	drawBoard(NewBoard),
+	Ai is 0, Bi is 2,
+	Af is 2, Bf is 2,
+	move(NewBoard, Ai, Bi, Af, Bf, FinalBoard),
+	drawBoard(FinalBoard).

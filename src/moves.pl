@@ -5,7 +5,32 @@
  * Checks if there is an element between (Xi, Yi) and (Xf, Yf). 
  * In Latrunculi, pieces cannot jump over other pieces.
  **/
-%! isElementBetween(Board, Xi, Yi, Xf, Yf).
+isElementBetween(Board, X, Y, X, Y).
+isElementBetween(Board, Xi, Yi, Xf, Yf) :-
+  Yf = Yi, /*Horizontal Move*/
+  nextStep(Xi,Xf,Xn),
+  %! Get the element that will be moved
+  getListElement(Yi, Board, FromRow),
+  getListElement(Xn, FromRow, ElementOnBoard),
+  isEmptyCell(ElementOnBoard),
+  isElementBetween(Board, Xn, Yi, Xf, Yf).
+
+isElementBetween(Board, Xi, Yi, Xf, Yf) :-
+  Xf = Xi, /*Vertical Move*/
+  nextStep(Yi,Yf,Yn),
+  %! Get the element that will be moved
+  getListElement(Yn, Board, FromRow),
+  getListElement(Xi, FromRow, ElementOnBoard),
+  isEmptyCell(ElementOnBoard),
+  isElementBetween(Board, Xi, Yn, Xf, Yf).
+
+nextStep(I,F,N) :-
+  I < F,
+  N is I + 1.
+
+nextStep(I,F,N) :-
+  I > F,
+  N is I - 1.
 
 
 /**
@@ -38,9 +63,11 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   isInsideBoard(Xi, Yi),
   isInsideBoard(Xf, Yf),
 
-  %! Get the element that will be moved
-  getListElement(Yi, Board, FromRow),
-  getListElement(Xi, FromRow, ElementToMove),
+  % !Check if the move would be orthogonal
+  isOrthogonal(Xi, Yi, Xf, Yf),
+
+  % !Check if have element between the movement
+  isElementBetween(Board, Xi, Yi, Xf, Yf),
 
   %! Get the row to where it will be moved
   getListElement(Yf, Board, ToRow),
@@ -49,8 +76,9 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   getListElement(Xf, ToRow, ToCell),
   isEmptyCell(ToCell),
 
-  % !Check if the move would be orthogonal
-  isOrthogonal(Xi, Yi, Xf, Yf),
+  %! Get the element that will be moved
+  getListElement(Yi, Board, FromRow),
+  getListElement(Xi, FromRow, ElementToMove),
 
   %! Replace the empty cell with the element that was moved
   setListElement(Xf, ElementToMove, ToRow, NewToRow),
