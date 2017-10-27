@@ -26,20 +26,15 @@ initialBoard([
   	[white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
 
 
+isPlayer1(black_soldier).
+isPlayer1(black_dux).
+isPlayer2(white_soldier).
+isPlayer2(white_dux).
 
-% trying creat board dynamicaly
-init_line(C, []) :-
-    C =< 0, !.
-% init_line(Columns, Line)
-init_line(C, [_ , T]) :-
-    C > 0,
-    C2 is C - 1,
-    init_line(C2, [T, empty_cell]).
+isEnemy(X,Y) :-
+	isPlayer1(X),
+	isPlayer2(Y).
 
-init_board(_ , R, []) :-
-    R =< 0, !.
-% init_board(Columns, Rows, Board)
-init_board(C, R, [H | T]) :-
-    init_line(C, H),
-    R2 is R - 1,
-    init_board(C, R2, T).
+isEnemy(X,Y) :-
+	isPlayer1(Y),
+	isPlayer2(X).
