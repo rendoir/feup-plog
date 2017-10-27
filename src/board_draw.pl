@@ -16,7 +16,7 @@ drawBoard([]) :-
 drawBoard([Line | Remainder]) :-
 	boardtopline(TopLine),
 	drawBoardLine(TopLine), nl,
-	write(8), write(' '), 
+	write(8), write(' '),
 	NextLineNumber is 7,
 	drawLine(Line), drawCell(boxlight_vertical), nl,
 	drawBoardRest(Remainder, NextLineNumber),
@@ -28,7 +28,7 @@ drawBoardRest([], _).
 drawBoardRest([Line | Remainder], LineNumber) :-
 	boardmiddleline(X),
 	drawBoardLine(X), nl,
-	write(LineNumber), write(' '),  
+	write(LineNumber), write(' '),
 	NextLineNumber is LineNumber - 1,
 	drawLine(Line), drawCell(boxlight_vertical), nl,
 	drawBoardRest(Remainder, NextLineNumber).
@@ -44,6 +44,7 @@ drawBoardLine([Cell | Remainder]) :-
 	drawCell(Cell),
 	drawBoardLine(Remainder).
 
+/** TEST **/
 drawInitialBoard :-
 	initialBoard(Board),
 	drawBoard(Board).
@@ -51,6 +52,10 @@ testMove :-
 	drawInitialBoard,
 	initialBoard(Board),
 	Xi is 0, Yi is 0,
-	Xf is 0, Yf is 1,
+	Xf is 0, Yf is 2,
 	move(Board, Xi, Yi, Xf, Yf, NewBoard),
-	drawBoard(NewBoard).
+	drawBoard(NewBoard),
+	Xii is 0, Yii is 2,
+	Xff is 2, Yff is 2,
+	move(NewBoard, Xii, Yii, Xff, Yff, FinalBoard),
+	drawBoard(FinalBoard).
