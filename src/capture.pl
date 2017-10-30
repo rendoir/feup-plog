@@ -61,17 +61,20 @@ capturePiece(Board, X, Y, ModifiedBoard) :-
 
 
 /**
-  Check if a piece should be captured
+  Check if a soldier should be captured
 **/
 isCaptured(Board, X, Y) :-
   isInCorner(X, Y),
+  isSoldier(Board, X, Y),
   getEnemiesAround(Board, X, Y, Counter),
   Counter >= 2.
 isCaptured(Board, X, Y) :-
   isInBorder(X, Y),
+  isSoldier(Board, X, Y),
   getEnemiesAround(Board, X, Y, Counter),
   Counter >= 2.
 isCaptured(Board, X, Y) :-
   not(isInCorner(X, Y)),
   not(isInBorder(X, Y)),
+  isSoldier(Board, X, Y),
   isBetweenEnemies(Board, X, Y).

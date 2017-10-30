@@ -31,6 +31,20 @@ isPlayer1(black_dux).
 isPlayer2(white_soldier).
 isPlayer2(white_dux).
 
+isSoldier(Board, X, Y) :-
+  getMatrixElement(Y, X, Board, Piece),
+  isSoldier(Piece).
+
+isDux(Board, X, Y) :-
+  getMatrixElement(Y, X, Board, Piece),
+  isDux(Piece).
+
+isSoldier(black_soldier).
+isSoldier(white_soldier).
+
+isDux(black_dux).
+isDux(white_dux).
+
 isEnemy(X, Y) :-
   isPlayer1(X),
   isPlayer2(Y).
