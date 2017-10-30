@@ -37,3 +37,35 @@ isEnemy(X, Y) :-
 isEnemy(X, Y) :-
   isPlayer1(Y),
   isPlayer2(X).
+
+
+/**
+  Checks if a cell is empty
+**/
+isEmptyCell(empty_cell).
+
+
+/**
+ * Checks if the 2D point (X,Y) is inside the board.
+ **/
+isInsideBoard(X, Y) :-
+  X >= 0, X =< 7,
+  Y >= 0, Y =< 7.
+
+
+/**
+ * Checks if an element is in the corner of the board. (X,Y)
+ **/
+isInCorner(0, 0).
+isInCorner(7, 0).
+isInCorner(0, 7).
+isInCorner(7, 7).
+
+
+/**
+ * Checks if an element is in the border. (X,Y)
+**/
+isInBorder(0, _).
+isInBorder(7, _).
+isInBorder(_, 0).
+isInBorder(_, 7).

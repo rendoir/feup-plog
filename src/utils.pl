@@ -11,12 +11,14 @@ setListElement(Index, Element, [Head | Tail], [Head | NewTail]):-
 getMatrixElement(0, ElementColumn, [Row|_], Element):-
 	getListElement(ElementColumn, Row, Element).
 getMatrixElement(ElementRow, ElementColumn, [_|RemainingLists], Element):-
+	isInsideBoard(ElementColumn, ElementRow),
 	NextRow is ElementRow - 1,
 	getMatrixElement(NextRow, ElementColumn, RemainingLists, Element).
 
 setMatrixElement(0, ElementColumn, NewElement, [OldRow|RemainingRows], [NewRow|RemainingRows]):-
 	setListElement(ElementColumn, NewElement, OldRow, NewRow).
 setMatrixElement(ElementRow, ElementColumn, NewElement, [Row|RemainingRows], [Row|ModifiedRemainingRows]):-
+	isInsideBoard(ElementColumn, ElementRow),
 	NextRow is ElementRow - 1,
 	setMatrixElement(NextRow, ElementColumn, NewElement, RemainingRows, ModifiedRemainingRows).
 
@@ -29,3 +31,9 @@ nextStep(I,F,N) :-
 nextStep(I,F,N) :-
    I > F,
    N is I - 1.
+
+not(Goal) :- Goal, !, fail.
+not(_).
+
+check(Goal, Result) :- Goal, Result is 1.
+check(_, Result) :- Result is 0.

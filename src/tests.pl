@@ -30,6 +30,5 @@ testMove :-
   Xf is 2,
   Yf is 4,
   move(Board, Xi, Yi, Xf, Yf, FinalBoard),
-  isBetweenEnemies(FinalBoard, Xf, Yf),
 
   drawBoard(FinalBoard).

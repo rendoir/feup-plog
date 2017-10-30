@@ -45,3 +45,5 @@ drawCell(boxlight_vertical_and_right) 	    :- put_code(9500).
 drawCell(boxlight_horizontal_and_vertical)  :- put_code(9532).
 drawCell(boxlight_horizontal_and_up) 	    :- put_code(9524).
 drawCell(boxlight_vertical_and_left) 	    :- put_code(9508).
+
+clearScreen :-  write('\33\[2J').
