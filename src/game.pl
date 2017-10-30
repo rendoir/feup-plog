@@ -5,25 +5,13 @@
 
 :- include('moves.pl').
 :- include('board_draw.pl').
+:- include('utils.pl').
 
 % [--------------------]
 % [--------GAME--------]
 % [--------------------]
 
-/**
- * Defines enemies
- **/
-isEnemy(Piece1,Piece2) :-
-	isPlayer1(Piece1),
-	isPlayer2(Piece2).
-isEnemy(Piece1,Piece2) :-
-	isPlayer1(Piece2),
-	isPlayer2(Piece1).
-
-isPieceOfPlayer1(Board, Xi, Xf) :-
-    1 = 1.
-
-inputCellOfBoard(Board, X, Y) :-
+inputCellOfBoard(X, Y) :-
     write('X:'),
     nl,
     read(X),
@@ -31,28 +19,38 @@ inputCellOfBoard(Board, X, Y) :-
     nl,
     read(Y).
 
+
+isPieceOfPlayer1(Board, X, Y) :-
+    getMatrixElement(X, Y, Board, Element),
+    isPlayer1(Element).
+
 play_player1(Board, NewBoard) :-
     write('Player1: Select piece to move'), nl,
-    inputCellOfBoard(Board, Xi, Yi),
+    !,
+    inputCellOfBoard(Xi, Yi),
     isPieceOfPlayer1(Board, Xi, Yi),
     write('Player1: Select destination cell'), nl,
-    inputCellOfBoard(Board, Xf, Yf),
+    inputCellOfBoard(Xf, Yf),
     move(Board,Xi,Yi,Xf,Yf, NewBoard).
 
 
-isPieceOfPlayer2(Board, Xi, Xf) :-
-    1 = 1.
+isPieceOfPlayer2(Board, X, Y) :-
+    getMatrixElement(X, Y, Board, Element),
+    isPlayer2(Element).
 
 play_player2(Board, NewBoard) :-
     write('Player2: Select piece to move'), nl,
-    inputCellOfBoard(Board, Xi, Yi),
+    !,
+    inputCellOfBoard(Xi, Yi),
     isPieceOfPlayer2(Board, Xi, Yi),
     write('Player2: Select destination cell'), nl,
-    inputCellOfBoard(Board, Xf, Yf),
+    inputCellOfBoard(Xf, Yf),
     move(Board,Xi,Yi,Xf,Yf, NewBoard).
 
 play(Board) :-
+    drawBoard(Board),
     play_player1(Board, NewBoard),
+    drawBoard(NewBoard),
     play_player2(NewBoard, FinalBoard),
     isEndOfGame(FinalBoard),
     play(FinalBoard).

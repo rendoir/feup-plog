@@ -10,9 +10,9 @@
 % [--------MAIN--------]
 % [--------------------]
 
-:- initialization(main()).
+:- initialization(main).
 
-main() :-
+main :-
     initialBoard(Board),
     play(Board).
 
