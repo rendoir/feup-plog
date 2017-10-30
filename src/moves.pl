@@ -1,22 +1,5 @@
+:-include('capture.pl').
 :-include('utils.pl').
-
-/**
- * Check if a piece is captured
- **/
-isBetweenEnemies(Board, X, Y) :-
-  getMatrixElement(Y, X, Board, Piece),
-  isEnemyX(Board, X, Y, next, Piece),
-  isEnemyX(Board, X, Y, before, Piece).
-
-isEnemyX(Board, X, Y, Search, Piece) :-
-  stepNumber(X, StepX, Search),
-  isInsideBoard(StepX, Y),
-  getMatrixElement(Y, StepX, Board, Element),
-  isEnemy(Piece, Element).
-
-stepNumber(Input, Output, next) :- Output is Input + 1.
-stepNumber(Input, Output, before) :- Output is Input - 1.
-
 
 /**
  * Checks if there is an element between (Xi, Yi) and (Xf, Yf).
@@ -39,15 +22,8 @@ stepNumber(Input, Output, before) :- Output is Input - 1.
    isEmptyCell(CurrentCell),
    isElementBetween(Board, Xi, Yn, Xf, Yf).
 
- nextStep(I,F,N) :-
-   I < F,
-   N is I + 1.
-
- nextStep(I,F,N) :-
-   I > F,
-   N is I - 1.
-
-/**
+ 
+ /**
  * Checks if the move is orthogonal.
  **/
 isOrthogonal(Xi, Yi, Xf, Yf) :-
@@ -67,10 +43,6 @@ isInsideBoard(X, Y) :-
  **/
 isEmptyCell(empty_cell).
 
-/**
- * Processes a move, checking captures and end of the game.
- **/
-%! postProcessMove(FromColumn, FromRow, ToColumn, ToRow, Board).
 
 /**
  * Checks if an element is in the corner of the board. (X,Y)
@@ -80,13 +52,15 @@ isInCorner(7, 0).
 isInCorner(0, 7).
 isInCorner(7, 7).
 
- /**
-  * Checks if an element is close to the border. (X,Y)
-  **/
-isCloseToBorder(0, _).
-isCloseToBorder(7, _).
-isCloseToBorder(_, 0).
-isCloseToBorder(_, 7).
+
+/**
+ * Checks if an element is in the border. (X,Y)
+**/
+isInBorder(0, _).
+isInBorder(7, _).
+isInBorder(_, 0).
+isInBorder(_, 7).
+
 
 /**
  * Moves a piece from (Xi, Yi) to (Xf, Yf). This substitutes (Xf, Yf) with the cell atom from (Xi, Yi) and sets (Xi, Yi) with the empty cell atom.

@@ -4,23 +4,32 @@
 % [--------------------]
 
 :- include('board_state.pl').
+:- include('board_draw.pl').
 :- include('moves.pl').
 
 % [--------------------]
 % [-------TESTS--------]
 % [--------------------]
 
-drawInitialBoard :-
-	initialBoard(Board),
-	drawBoard(Board).
+test_board([
+	[empty_cell, empty_cell, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
+	[empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, black_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, black_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+  	[white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
+
 testMove :-
-	drawInitialBoard,
-	initialBoard(Board),
-	Xi is 0, Yi is 0,
-	Xf is 0, Yf is 2,
-	move(Board, Xi, Yi, Xf, Yf, NewBoard),
-	drawBoard(NewBoard),
-	Xii is 0, Yii is 2,
-	Xff is 2, Yff is 2,
-	move(NewBoard, Xii, Yii, Xff, Yff, FinalBoard),
-	drawBoard(FinalBoard).
+  test_board(Board),
+  drawBoard(Board),
+  
+  Xi is 3,
+  Yi is 4,
+  Xf is 2,
+  Yf is 4,
+  move(Board, Xi, Yi, Xf, Yf, FinalBoard),
+  isBetweenEnemies(FinalBoard, Xf, Yf),
+
+  drawBoard(FinalBoard).

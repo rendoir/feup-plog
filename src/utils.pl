@@ -19,3 +19,13 @@ setMatrixElement(0, ElementColumn, NewElement, [OldRow|RemainingRows], [NewRow|R
 setMatrixElement(ElementRow, ElementColumn, NewElement, [Row|RemainingRows], [Row|ModifiedRemainingRows]):-
 	NextRow is ElementRow - 1,
 	setMatrixElement(NextRow, ElementColumn, NewElement, RemainingRows, ModifiedRemainingRows).
+
+stepNumber(Input, Output, next) :- Output is Input + 1.
+stepNumber(Input, Output, before) :- Output is Input - 1.
+
+nextStep(I,F,N) :-
+   I < F,
+   N is I + 1.
+nextStep(I,F,N) :-
+   I > F,
+   N is I - 1.
