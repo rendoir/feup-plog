@@ -10,6 +10,15 @@
 % [--------GAME--------]
 % [--------------------]
 
+/**
+ * Defines enemies
+ **/
+isEnemy(Piece1,Piece2) :-
+	isPlayer1(Piece1),
+	isPlayer2(Piece2).
+isEnemy(Piece1,Piece2) :-
+	isPlayer1(Piece2),
+	isPlayer2(Piece1).
 
 isPieceOfPlayer1(Board, Xi, Xf) :-
     1 = 1.

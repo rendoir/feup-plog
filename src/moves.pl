@@ -1,5 +1,22 @@
 :-include('utils.pl').
 
+/**
+ * Check if a piece is captured
+ **/
+isBetweenEnemies(Board, X, Y) :-
+  getMatrixElement(Y, X, Board, Piece),
+  isEnemyX(Board, X, Y, next, Piece),
+  isEnemyX(Board, X, Y, before, Piece).
+
+isEnemyX(Board, X, Y, Search, Piece) :-
+  stepNumber(X, StepX, Search),
+  isInsideBoard(StepX, Y),
+  getMatrixElement(Y, StepX, Board, Element),
+  isEnemy(Piece, Element).
+
+stepNumber(Input, Output, next) :- Output is Input + 1.
+stepNumber(Input, Output, before) :- Output is Input - 1.
+
 
 /**
  * Checks if there is an element between (Xi, Yi) and (Xf, Yf).
