@@ -45,12 +45,19 @@ isSoldier(white_soldier).
 isDux(black_dux).
 isDux(white_dux).
 
-isEnemy(X, Y) :-
-  isPlayer1(X),
-  isPlayer2(Y).
-isEnemy(X, Y) :-
-  isPlayer1(Y),
-  isPlayer2(X).
+isFriend(Piece1, Piece2) :-
+  isPlayer1(Piece1),
+  isPlayer1(Piece2).
+isFriend(Piece1, Piece2) :-
+  isPlayer2(Piece2),
+  isPlayer2(Piece1).
+
+isEnemy(Piece1, Piece2) :-
+  isPlayer1(Piece1),
+  isPlayer2(Piece2).
+isEnemy(Piece1, Piece2) :-
+  isPlayer1(Piece2),
+  isPlayer2(Piece1).
 
 
 /**
