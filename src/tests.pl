@@ -12,14 +12,15 @@
 % [--------------------]
 
 test_board([
-	[black_dux, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
-	[white_soldier, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell, empty_cell],
+	[black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
+	[empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, empty_cell, black_soldier, empty_cell, empty_cell, black_soldier, empty_cell, empty_cell],
-	[empty_cell, empty_cell, empty_cell, empty_cell, white_soldier, white_dux, black_soldier, empty_cell],
-	[empty_cell, empty_cell, black_soldier, empty_cell, empty_cell, black_soldier, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-  	[white_soldier, white_soldier, empty_cell, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, white_soldier, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, white_soldier, white_dux, empty_cell, empty_cell, empty_cell],
+  	[white_soldier, white_soldier, empty_cell, white_soldier, white_soldier, white_soldier, white_soldier, empty_cell]]).
+
 
 testMove :-
   test_board(Board),
@@ -34,10 +35,12 @@ testMove :-
 
   drawBoard(FinalBoard).
 
+
 testCapture :-
   test_board(Board),
   drawBoard(Board),
 
-  getBlockedPaths(Board, 0, 0, Counter),
-  write('Blocked paths: '), write(Counter), nl,
-  isCaptured(Board, 0, 0).
+  move(Board, 5, 0, 5, 6, FinalBoard),
+  isCaptured(FinalBoard, 4, 6),
+ 
+  drawBoard(FinalBoard).
