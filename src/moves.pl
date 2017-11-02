@@ -57,7 +57,9 @@ friendDuxImmobilizedHorizontal(Board, Xi, Yi, Xf, Yf, Search) :-
   getMatrixElement(Yf, NextX, Board, AdjacentPiece),
   isDux(AdjacentPiece),
   isFriend(AdjacentPiece, PieceToMove),
-  getFriendsAround(Board, NextX, Yf, Counter),
+  getFriendsAround(Board, NextX, Yf, CounterF),
+  getEnemiesAround(Board, NextX, Yf, CounterE),
+  Counter is CounterF + CounterE,
   getMaxPiecesAround(NextX, Yf, Max),
   DuxMax is Max - 1,
   Counter < DuxMax.
@@ -68,7 +70,9 @@ friendDuxImmobilizedVertical(Board, Xi, Yi, Xf, Yf, Search) :-
   getMatrixElement(NextY, Xf, Board, AdjacentPiece),
   isDux(AdjacentPiece),
   isFriend(AdjacentPiece, PieceToMove),
-  getFriendsAround(Board, Xf, NextY, Counter),
+  getFriendsAround(Board, NextX, Yf, CounterF),
+  getEnemiesAround(Board, NextX, Yf, CounterE),
+  Counter is CounterF + CounterE,
   getMaxPiecesAround(Xf, NextY, Max),
   DuxMax is Max - 1,
   Counter < DuxMax.

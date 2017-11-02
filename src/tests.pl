@@ -12,12 +12,12 @@
 % [--------------------]
 
 test_board([
-	[black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
+	[black_soldier, black_soldier, black_soldier, white_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
 	[empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, empty_cell, empty_cell, empty_cell, white_soldier, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, black_soldier, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, white_soldier, white_dux, empty_cell, empty_cell, empty_cell],
   	[white_soldier, white_soldier, empty_cell, white_soldier, white_soldier, white_soldier, white_soldier, empty_cell]]).
 
@@ -40,7 +40,6 @@ testCapture :-
   test_board(Board),
   drawBoard(Board),
 
-  move(Board, 5, 0, 5, 6, FinalBoard),
-  isCaptured(FinalBoard, 4, 6),
+  move(Board, 5, 7, 5, 6, FinalBoard),
  
   drawBoard(FinalBoard).
