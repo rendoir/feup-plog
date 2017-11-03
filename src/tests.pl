@@ -17,7 +17,7 @@ test_board([
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, empty_cell, empty_cell, empty_cell, black_soldier, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, white_soldier, white_dux, empty_cell, empty_cell, empty_cell],
   	[white_soldier, white_soldier, empty_cell, white_soldier, white_soldier, white_soldier, white_soldier, empty_cell]]).
 

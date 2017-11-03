@@ -6,34 +6,25 @@
   Check if a piece if a piece is between enemies
 **/
 isBetweenEnemies(Board, X, Y) :-
-  isBetweenEnemiesHorizontal(Board, X, Y).
+  isEnemyAround(Board, X, Y, next, horizontal),
+  isEnemyAround(Board, X, Y, before, horizontal).
 isBetweenEnemies(Board, X, Y) :-
-  isBetweenEnemiesVertical(Board, X, Y).
-
-/**
- Check if the adjacent pieces are enemies
-**/
-isBetweenEnemiesHorizontal(Board, X, Y) :-
-  getMatrixElement(Y, X, Board, Piece),
-  isEnemyHorizontal(Board, X, Y, next, Piece),
-  isEnemyHorizontal(Board, X, Y, before, Piece).
-isBetweenEnemiesVertical(Board, X, Y) :-
-  getMatrixElement(Y, X, Board, Piece),
-  isEnemyVertical(Board, X, Y, next, Piece),
-  isEnemyVertical(Board, X, Y, before, Piece).
+  isEnemyAround(Board, X, Y, next, vertical),
+  isEnemyAround(Board, X, Y, before, vertical).
 
 /**
  Check if an adjacent piece is an enemy
 **/
-isEnemyHorizontal(Board, X, Y, Search, Piece) :-
-  stepNumber(X, StepX, Search),
-  isInsideBoard(StepX, Y),
-  getMatrixElement(Y, StepX, Board, Element),
+isEnemyAround(Board, X, Y, Step, Direction) :-
+  getMatrixElement(Y, X, Board, Piece),
+  stepDirection(X, Y, StepX, StepY, Step, Direction),
+  isInsideBoard(StepX, StepY),
+  getMatrixElement(StepY, StepX, Board, Element),
   isEnemy(Piece, Element).
-isEnemyVertical(Board, X, Y, Search, Piece) :-
-  stepNumber(Y, StepY, Search),
-  isInsideBoard(X, StepY),
-  getMatrixElement(StepY, X, Board, Element),
+isEnemyAround(Board, X, Y, Step, Direction, Piece) :-
+  stepDirection(X, Y, StepX, StepY, Step, Direction),
+  isInsideBoard(StepX, StepY),
+  getMatrixElement(StepY, StepX, Board, Element),
   isEnemy(Piece, Element).
 
 /**
@@ -43,27 +34,28 @@ getEnemiesAround(Board, X, Y, Counter) :-
   getMatrixElement(Y, X, Board, Piece),
   not(isEmptyCell(Piece)),
   Counter0 is 0,
-  check(isEnemyHorizontal(Board, X, Y, next, Piece), Result0),
+  check(isEnemyAround(Board, X, Y, next, horizontal, Piece), Result0),
   Counter1 is Counter0 + Result0,
-  check(isEnemyHorizontal(Board, X, Y, before, Piece), Result1),
+  check(isEnemyAround(Board, X, Y, before, horizontal, Piece), Result1),
   Counter2 is Counter1 + Result1,
-  check(isEnemyVertical(Board, X, Y, next, Piece), Result2),
+  check(isEnemyAround(Board, X, Y, next, vertical, Piece), Result2),
   Counter3 is Counter2 + Result2,
-  check(isEnemyVertical(Board, X, Y, before, Piece), Result3),
+  check(isEnemyAround(Board, X, Y, before, vertical, Piece), Result3),
   Counter is Counter3 + Result3.
 
 /**
  Check if an adjacent piece is a friend
 **/
-isFriendHorizontal(Board, X, Y, Search, Piece) :-
-  stepNumber(X, StepX, Search),
-  isInsideBoard(StepX, Y),
-  getMatrixElement(Y, StepX, Board, Element),
+isFriendAround(Board, X, Y, Step, Direction) :-
+  getMatrixElement(Y, X, Board, Piece),
+  stepDirection(X, Y, StepX, StepY, Step, Direction),
+  isInsideBoard(StepX, StepY),
+  getMatrixElement(StepY, StepX, Board, Element),
   isFriend(Piece, Element).
-isFriendVertical(Board, X, Y, Search, Piece) :-
-  stepNumber(Y, StepY, Search),
-  isInsideBoard(X, StepY),
-  getMatrixElement(StepY, X, Board, Element),
+isFriendAround(Board, X, Y, Step, Direction, Piece) :-
+  stepDirection(X, Y, StepX, StepY, Step, Direction),
+  isInsideBoard(StepX, StepY),
+  getMatrixElement(StepY, StepX, Board, Element),
   isFriend(Piece, Element).
 
 /**
@@ -73,13 +65,13 @@ getFriendsAround(Board, X, Y, Counter) :-
   getMatrixElement(Y, X, Board, Piece),
   not(isEmptyCell(Piece)),
   Counter0 is 0,
-  check(isFriendHorizontal(Board, X, Y, next, Piece), Result0),
+  check(isFriendAround(Board, X, Y, next, horizontal, Piece), Result0),
   Counter1 is Counter0 + Result0,
-  check(isFriendHorizontal(Board, X, Y, before, Piece), Result1),
+  check(isFriendAround(Board, X, Y, before, horizontal, Piece), Result1),
   Counter2 is Counter1 + Result1,
-  check(isFriendVertical(Board, X, Y, next, Piece), Result2),
+  check(isFriendAround(Board, X, Y, next, vertical, Piece), Result2),
   Counter3 is Counter2 + Result2,
-  check(isFriendVertical(Board, X, Y, before, Piece), Result3),
+  check(isFriendAround(Board, X, Y, before, vertical, Piece), Result3),
   Counter is Counter3 + Result3.
 
 /**

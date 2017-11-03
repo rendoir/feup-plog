@@ -22,6 +22,13 @@ setMatrixElement(ElementRow, ElementColumn, NewElement, [Row|RemainingRows], [Ro
 	NextRow is ElementRow - 1,
 	setMatrixElement(NextRow, ElementColumn, NewElement, RemainingRows, ModifiedRemainingRows).
 
+stepDirection(X, Y, StepX, StepY, Step, horizontal) :-
+	stepNumber(X, StepX, Step),
+	StepY is Y.
+stepDirection(X, Y, StepX, StepY, Step, vertical) :-
+	stepNumber(Y, StepY, Step),
+	StepX is X.
+
 stepNumber(Input, Output, next) :- Output is Input + 1.
 stepNumber(Input, Output, before) :- Output is Input - 1.
 
@@ -31,6 +38,19 @@ nextStep(I,F,N) :-
 nextStep(I,F,N) :-
    I > F,
    N is I - 1.
+
+/**
+  Calculates the maximum number of pieces that can be around a piece
+**/
+getMaxPiecesAround(X, Y, Max) :-
+  isInCorner(X, Y),
+  Max is 2.
+getMaxPiecesAround(X, Y, Max) :-
+  isInBorder(X, Y),
+  Max is 3.
+getMaxPiecesAround(_, _, Max) :-
+  Max is 4.
+
 
 not(Goal) :- Goal, !, fail.
 not(_).
