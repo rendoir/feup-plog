@@ -50,7 +50,9 @@ testAll :-
   testSoldierCaptureMid,
   testOrthogonal,
   testPiecesBetween,
-  testImmobilizeFriendDux.
+  testImmobilizeFriendDux,
+  testOffensiveDefensiveMove,
+  testOffensiveDefensiveMove2.
 
 testDuxCaptureCorner :-
   test_board(Board),
@@ -121,3 +123,23 @@ testImmobilizeFriendDux :-
   move(Board3, 4, 0, 4, 2, Board4),
   isCaptured(Board4, 4, 3),
   drawBoard(Board4).
+
+testOffensiveDefensiveMove :-
+  test_board_3(Board),
+  drawBoard(Board),
+  moveIsOffensive(Board, 4, 0, 4, 2),
+  move(Board, 4, 0, 4, 2, Board2),
+  drawBoard(Board2),
+  moveIsDefensive(Board2, 3, 0, 4, 0),
+  move(Board2, 3, 0, 4, 0, Board3),
+  drawBoard(Board3).
+
+testOffensiveDefensiveMove2 :-
+  test_board_2(Board),
+  drawBoard(Board),
+  moveIsDefensive(Board, 3, 3, 4, 3),
+  move(Board, 3, 3, 4, 3, Board2),
+  drawBoard(Board2),
+  moveIsOffensive(Board2, 7, 3, 6, 3),
+  move(Board2, 7, 3, 6, 3, Board3),
+  drawBoard(Board3).

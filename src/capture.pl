@@ -90,6 +90,21 @@ getBlockedPaths(_, _, _, Counter) :- Counter is 0.
 capturePiece(Board, X, Y, ModifiedBoard) :-
   setMatrixElement(Y, X, empty_cell, Board, ModifiedBoard).
 
+/**
+  Checks if a move caused at least one enemy soldier to be captured
+**/
+isEnemySoldierCaptured(Board, _, _, Xf, Yf) :- isEnemySoldierClassicallyCaptured(Board, Xf, Yf, next, horizontal).
+isEnemySoldierCaptured(Board, _, _, Xf, Yf) :- isEnemySoldierClassicallyCaptured(Board, Xf, Yf, before, horizontal).
+isEnemySoldierCaptured(Board, _, _, Xf, Yf) :- isEnemySoldierClassicallyCaptured(Board, Xf, Yf, next, vertical).
+isEnemySoldierCaptured(Board, _, _, Xf, Yf) :- isEnemySoldierClassicallyCaptured(Board, Xf, Yf, before, vertical).
+
+/**
+  Check if a soldier around is captured by the classic rules
+**/
+isEnemySoldierClassicallyCaptured(Board, X, Y, Step, Direction) :-
+  stepDirection(X, Y, StepX, StepY, Step, Direction),
+  isCaptured(Board, StepX, StepY).
+
 
 /**
   Check if a soldier should be captured
