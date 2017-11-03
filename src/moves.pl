@@ -32,16 +32,16 @@ isOrthogonal(Xi, Yi, Xf, Yf) :-
 /**
   Checks if a move will immobilize its own dux
 **/
-friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf) :-
-  friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf, next, horizontal).
-friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf) :-
-  friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf, before, horizontal).
-friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf) :-
-  friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf, next, vertical).
-friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf) :-
-  friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf, before, vertical).
+friendDuxImmobilized(Board, Xi, Yi, Xf, Yf) :-
+  friendDuxImmobilized(Board, Xi, Yi, Xf, Yf, next, horizontal).
+friendDuxImmobilized(Board, Xi, Yi, Xf, Yf) :-
+  friendDuxImmobilized(Board, Xi, Yi, Xf, Yf, before, horizontal).
+friendDuxImmobilized(Board, Xi, Yi, Xf, Yf) :-
+  friendDuxImmobilized(Board, Xi, Yi, Xf, Yf, next, vertical).
+friendDuxImmobilized(Board, Xi, Yi, Xf, Yf) :-
+  friendDuxImmobilized(Board, Xi, Yi, Xf, Yf, before, vertical).
 
-friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf, Step, Direction) :-
+friendDuxImmobilized(Board, Xi, Yi, Xf, Yf, Step, Direction) :-
   getMatrixElement(Yi, Xi, Board, PieceToMove),
   stepDirection(Xf, Yf, StepX, StepY, Step, Direction),  
   getMatrixElement(StepY, StepX, Board, AdjacentPiece),
@@ -52,7 +52,7 @@ friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf, Step, Direction) :-
   Counter is CounterF + CounterE,
   getMaxPiecesAround(StepX, StepY, Max),
   DuxMax is Max - 1,
-  Counter < DuxMax.
+  Counter >= DuxMax.
 
   /*
 moveIsOffensive(Board, Xi, Yi, Xf, Yf) :-
@@ -85,7 +85,7 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   isEmptyCell(ToCell),
 
   isElementBetween(Board, Xi, Yi, Xf, Yf),
-  friendDuxNotImmobilized(Board, Xi, Yi, Xf, Yf),
+  not(friendDuxImmobilized(Board, Xi, Yi, Xf, Yf)),
   
   setMatrixElement(Yi, Xi, empty_cell, Board, ModifiedBoard),
   setMatrixElement(Yf, Xf, FromCell, ModifiedBoard, FinalBoard).
