@@ -31,6 +31,16 @@ test_board_2([
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
   	[black_soldier, empty_cell, white_soldier, empty_cell, white_soldier, empty_cell, empty_cell, white_soldier]]).
 
+test_board_3([
+	[black_dux, black_soldier, empty_cell, black_soldier, black_soldier, black_soldier, black_soldier, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[black_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, white_soldier],
+	[empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell],
+	[black_dux, black_soldier, empty_cell, empty_cell, black_soldier, empty_cell, empty_cell, empty_cell],
+	[white_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+  	[empty_cell, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, empty_cell]]).
+
 testAll :-
   testDuxCaptureCorner,
   testSoldierCaptureCorner,
@@ -38,7 +48,9 @@ testAll :-
   testSoldierCaptureBorder,
   testDuxCaptureMid,
   testSoldierCaptureMid,
-  testOrthogonal.
+  testOrthogonal,
+  testPiecesBetween,
+  testImmobilizeFriendDux.
 
 testDuxCaptureCorner :-
   test_board(Board),
@@ -97,3 +109,15 @@ testPiecesBetween :-
   test_board(Board),
   drawBoard(Board),
   not(move(Board, 3, 7, 3, 3, Board)).
+
+testImmobilizeFriendDux :-
+  test_board_3(Board),
+  drawBoard(Board),
+  not(move(Board, 0, 2, 0, 1, Board)),
+  not(move(Board, 0, 2, 0, 3, Board)),
+  move(Board, 3, 7, 3, 3, Board2),
+  move(Board2, 5, 7, 5, 3, Board3),
+  not(move(Board, 7, 2, 4, 2, Board)),
+  move(Board3, 4, 0, 4, 2, Board4),
+  isCaptured(Board4, 4, 3),
+  drawBoard(Board4).
