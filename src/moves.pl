@@ -90,6 +90,27 @@ simulateMove(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
 
 
 /**
+  Check if a soldier can move given that he could be locked
+  Even if he is locked, there are situations where he can still move
+**/
+checkLockedSoldier(Board, Xi, Yi, _, _) :- not(isSoldier(Board, Xi, Yi)).
+checkLockedSoldier(Board, Xi, Yi, Xf, Yf) :- moveIsOffensive(Board, Xi, Yi, Xf, Yf).
+checkLockedSoldier(Board, Xi, Yi, _, _) :-
+  not(checkLockedSoldier(Board, Xi, Yi, _, _, next, horizontal)),
+  not(checkLockedSoldier(Board, Xi, Yi, _, _, before, horizontal)),
+  not(checkLockedSoldier(Board, Xi, Yi, _, _, next, vertical)),
+  not(checkLockedSoldier(Board, Xi, Yi, _, _, before, vertical)).
+checkLockedSoldier(Board, X, Y, _, _, Step, Direction) :- 
+  getMatrixElement(Y, X, Board, Piece),
+  stepDirection(X, Y, StepX, StepY, Step, Direction),
+  getMatrixElement(StepY, StepX, Board, Adjacent),
+  isEnemy(Piece, Adjacent),
+  getEnemiesAround(Board, StepX, StepY, Counter),
+  Counter < 2.
+  
+  
+
+/**
   Moves a piece from (Xi, Yi) to (Xf, Yf). This substitutes (Xf, Yf) with the cell atom from (Xi, Yi) and sets (Xi, Yi) with the empty cell atom.
  **/
 move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
@@ -103,7 +124,7 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   isEmptyCell(ToCell),
 
   isElementBetween(Board, Xi, Yi, Xf, Yf),
-  %checkLockedSoldier(Board, Xi, Yi, Xf, Yf),
+  checkLockedSoldier(Board, Xi, Yi, Xf, Yf),
   not(friendDuxImmobilized(Board, Xi, Yi, Xf, Yf)),
   
   setMatrixElement(Yi, Xi, empty_cell, Board, ModifiedBoard),
