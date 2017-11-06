@@ -83,6 +83,18 @@ moveIsDefensive(Board, Xi, Yi, Xf, Yf) :-
 
 
 /**
+  Check if a piece just moves one square
+**/
+moveIsOneSquare(Xi, _, Xf, _) :-
+  DeltaX is Xi - Xf,
+  abs(DeltaX, AbsoluteDeltaX),
+  AbsoluteDeltaX =:= 1.
+moveIsOneSquare(_, Yi, _, Yf) :-
+  DeltaY is Yi - Yf,
+  abs(DeltaY, AbsoluteDeltaY),
+  AbsoluteDeltaY =:= 1.
+
+/**
   Simulates a move without checking if it is a possible move
 **/
 simulateMove(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
@@ -109,8 +121,29 @@ checkLockedSoldier(Board, X, Y, _, _, Step, Direction) :-
   isEnemy(Piece, Adjacent),
   getEnemiesAround(Board, StepX, StepY, Counter),
   Counter < 2.
-  
-  
+
+/**
+  Check if the mobility rules of the dux allow him to move
+**/
+checkDuxMobility(Board, Xi, Yi, _, _) :- not(isDux(Board, Xi, Yi)).
+checkDuxMobility(Board, Xi, Yi, Xf, Yf) :- 
+  getBlockedPaths(Board, Xi, Yi, BlockedPaths),
+  checkDuxMobility(Board, Xi, Yi, Xf, Yf, BlockedPaths).   
+
+checkDuxMobility(_, _, _, _, _, 0).
+
+checkDuxMobility(_, Xi, Yi, Xf, Yf, 1) :-
+  not(isInCorner(Xi, Yi)),
+  moveIsOneSquare(Xi, Yi, Xf, Yf).
+checkDuxMobility(Board, Xi, Yi, Xf, Yf, 1) :-
+  not(isInCorner(Xi, Yi)),
+  moveIsOffensive(Board, Xi, Yi, Xf, Yf).
+
+checkDuxMobility(Board, Xi, Yi, Xf, Yf, 2) :-
+  not(isInCorner(Xi, Yi)),
+  not(isInBorder(Xi, Yi)),
+  moveIsOffensive(Board, Xi, Yi, Xf, Yf).
+    
 
 /**
   Moves a piece from (Xi, Yi) to (Xf, Yf). This substitutes (Xf, Yf) with the cell atom from (Xi, Yi) and sets (Xi, Yi) with the empty cell atom.
@@ -123,10 +156,12 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   getMatrixElement(Yi, Xi, Board, FromCell),
   getMatrixElement(Yf, Xf, Board, ToCell),
 
+  not(isEmptyCell(FromCell)),
   isEmptyCell(ToCell),
 
   isElementBetween(Board, Xi, Yi, Xf, Yf),
   checkLockedSoldier(Board, Xi, Yi, Xf, Yf),
+  checkDuxMobility(Board, Xi, Yi, Xf, Yf),
   not(friendDuxImmobilized(Board, Xi, Yi, Xf, Yf)),
   
   captureXII(Board, Xi, Yi, Xf, Yf, CaptureBoard),

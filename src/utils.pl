@@ -78,3 +78,9 @@ not(_).
 
 check(Goal, Result) :- Goal, Result is 1.
 check(_, Result) :- Result is 0.
+
+abs(Number, Absolute) :-
+  Number > 0,
+  Absolute is Number.
+abs(Number, Absolute) :-
+  Absolute is Number * (-1).
