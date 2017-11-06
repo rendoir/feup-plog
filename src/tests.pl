@@ -62,14 +62,15 @@ test_board_5([
   	[empty_cell, empty_cell, white_soldier, white_soldier, white_soldier, empty_cell, white_soldier, white_soldier]]).
 
 test_board_6([
-	[black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
-	[empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell, empty_cell],
+	[white_soldier, empty_cell, empty_cell, black_soldier, black_soldier, white_soldier, white_soldier, empty_cell],
+	[white_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell],
-  	[white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
+	[black_soldier, empty_cell, empty_cell, empty_cell, black_soldier, empty_cell, white_soldier, white_soldier],
+	[black_dux, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[black_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[white_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell]]).
+
 
 testAll :-
   testDuxCaptureCorner,
@@ -84,7 +85,8 @@ testAll :-
   testOffensiveDefensiveMove,
   testOffensiveDefensiveMove2,
   testLockedSoldier,
-  testPushAndCrush.
+  testPushAndCrush,
+  testFlank.
 
 testDuxCaptureCorner :-
   test_board(Board),
@@ -188,3 +190,13 @@ testPushAndCrush :-
   drawBoard(Board2),
   move(Board2, 1, 3, 1, 2, Board3),
   drawBoard(Board3).
+
+testFlank :-
+  test_board_6(Board),
+  drawBoard(Board),
+  move(Board, 0, 0, 2, 0, Board2),
+  drawBoard(Board2),
+  move(Board2, 0, 1, 0, 3, Board3),
+  drawBoard(Board3),
+  move(Board3, 4, 4, 5, 4, Board4),
+  drawBoard(Board4).
