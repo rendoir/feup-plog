@@ -116,7 +116,22 @@ isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
   stepDirection(FriendX, FriendY, EnemyX, EnemyY, Step, Direction),
   getMatrixElement(EnemyY, EnemyX, Board, EnemyPiece),
   isEnemy(Piece, EnemyPiece),
-  isSoldier(EnemyPiece).
+  isSoldier(EnemyPiece),
+  isInBorder(EnemyX, EnemyY).
+isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :- 
+  getMatrixElement(Yi, Xi, Board, Piece),
+  getDirection(Xi, Yi, Xf, Yf, Direction),
+  getStep(Xi, Yi, Xf, Yf, Step, Direction),
+  stepDirection(Xf, Yf, FriendX, FriendY, Step, Direction),
+  getMatrixElement(FriendY, FriendX, Board, FriendPiece),
+  isFriend(Piece, FriendPiece),
+  stepDirection(FriendX, FriendY, EnemyX, EnemyY, Step, Direction),
+  getMatrixElement(EnemyY, EnemyX, Board, EnemyPiece),
+  isEnemy(Piece, EnemyPiece),
+  isSoldier(EnemyPiece),
+  stepDirection(EnemyX, EnemyY, Friend2X, Friend2Y, Step, Direction),
+  getMatrixElement(Friend2Y, Friend2X, Board, FriendPiece2),
+  isFriend(Piece, FriendPiece2).
 
 
 /**

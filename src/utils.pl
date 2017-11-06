@@ -41,10 +41,10 @@ nextStep(I,F,N) :-
 
 getDirection(Xi, _, Xf, _, Direction) :-
   Xi =:= Xf,
-  Direction = horizontal.
+  Direction = vertical.
 getDirection(_, Yi, _, Yf, Direction) :-
   Yi =:= Yf,
-  Direction = vertical.
+  Direction = horizontal.
 
 getStep(Xi, _, Xf, _, Step, horizontal) :-
   Xf > Xi,
