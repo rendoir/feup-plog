@@ -104,7 +104,7 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
 
   isElementBetween(Board, Xi, Yi, Xf, Yf),
   %checkLockedSoldier(Board, Xi, Yi, Xf, Yf),
-  not(friendDuxImmobilized(Board, Xi, Yi, Xf, Yf)),
+  %not(friendDuxImmobilized(Board, Xi, Yi, Xf, Yf)),
   
   setMatrixElement(Yi, Xi, empty_cell, Board, ModifiedBoard),
   setMatrixElement(Yf, Xf, FromCell, ModifiedBoard, FinalBoard).

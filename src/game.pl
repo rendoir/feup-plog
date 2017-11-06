@@ -21,7 +21,7 @@ inputCellOfBoard(X, Y) :-
 
 
 isPieceOfPlayer1(Board, X, Y) :-
-    getMatrixElement(X, Y, Board, Element),
+    getMatrixElement(Y, X, Board, Element),
     isPlayer1(Element).
 
 play_player1(Board, NewBoard) :-
@@ -35,7 +35,7 @@ play_player1(Board, NewBoard) :-
 
 
 isPieceOfPlayer2(Board, X, Y) :-
-    getMatrixElement(X, Y, Board, Element),
+    getMatrixElement(Y, X, Board, Element),
     isPlayer2(Element).
 
 play_player2(Board, NewBoard) :-
@@ -52,5 +52,5 @@ play(Board) :-
     play_player1(Board, NewBoard),
     drawBoard(NewBoard),
     play_player2(NewBoard, FinalBoard),
-    isEndOfGame(FinalBoard),
+    % isEndOfGame(FinalBoard),
     play(FinalBoard).
