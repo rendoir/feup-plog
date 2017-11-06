@@ -41,6 +41,16 @@ test_board_3([
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
   	[empty_cell, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, empty_cell]]).
 
+test_board_4([
+	[empty_cell, black_soldier, empty_cell, black_soldier, black_soldier, white_soldier, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell, black_soldier],
+	[black_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, white_soldier],
+	[white_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell, empty_cell],
+  	[empty_cell, white_soldier, black_soldier, white_soldier, white_soldier, black_soldier, white_soldier, white_soldier]]).
+
 testAll :-
   testDuxCaptureCorner,
   testSoldierCaptureCorner,
@@ -52,7 +62,8 @@ testAll :-
   testPiecesBetween,
   testImmobilizeFriendDux,
   testOffensiveDefensiveMove,
-  testOffensiveDefensiveMove2.
+  testOffensiveDefensiveMove2,
+  testLockedSoldier.
 
 testDuxCaptureCorner :-
   test_board(Board),
@@ -143,3 +154,17 @@ testOffensiveDefensiveMove2 :-
   moveIsOffensive(Board2, 7, 3, 6, 3),
   move(Board2, 7, 3, 6, 3, Board3),
   drawBoard(Board3).
+
+testLockedSoldier :-
+  test_board_4(Board),
+  drawBoard(Board),
+  move(Board, 5, 7, 5, 1, Board2),
+  isCaptured(Board2, 5, 0),
+  drawBoard(Board2),
+  not(move(Board2, 2, 7, 2, 0, Board2)),
+  move(Board2, 2, 7, 2, 6, Board3),
+  drawBoard(Board3),
+  not(move(Board3, 0, 2, 5, 2, Board3)),
+  move(Board3, 0, 2, 6, 2, Board4),
+  isCaptured(Board4, 7, 2),
+  drawBoard(Board4).

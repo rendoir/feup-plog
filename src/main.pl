@@ -10,7 +10,7 @@
 % [--------MAIN--------]
 % [--------------------]
 
-:- initialization(main).
+%:- initialization(main).
 
 main :-
     initialBoard(Board),
