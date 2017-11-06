@@ -70,7 +70,9 @@ moveIsOffensive(Board, Xi, Yi, Xf, Yf) :-
   isEnemyDuxAround(SimulationBoard, Xf, Yf).
 moveIsOffensive(Board, Xi, Yi, Xf, Yf) :-
   simulateMove(Board, Xi, Yi, Xf, Yf, SimulationBoard),
-  isEnemySoldierCaptured(SimulationBoard, Xi, Yi, Xf, Yf).
+  isEnemySoldierCapturedClassic(SimulationBoard, Xf, Yf).
+moveIsOffensive(Board, Xi, Yi, Xf, Yf) :-
+  isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf).
 
 
 /**
@@ -127,5 +129,9 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   checkLockedSoldier(Board, Xi, Yi, Xf, Yf),
   not(friendDuxImmobilized(Board, Xi, Yi, Xf, Yf)),
   
-  setMatrixElement(Yi, Xi, empty_cell, Board, ModifiedBoard),
-  setMatrixElement(Yf, Xf, FromCell, ModifiedBoard, FinalBoard).
+  captureXII(Board, Xi, Yi, Xf, Yf, CaptureBoard),
+
+  setMatrixElement(Yi, Xi, empty_cell, CaptureBoard, MovedBoard),
+  setMatrixElement(Yf, Xf, FromCell, MovedBoard, MovedBoard2),
+  
+  captureClassic(MovedBoard2, Xf, Yf, FinalBoard).

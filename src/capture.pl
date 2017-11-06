@@ -1,7 +1,3 @@
-% [-------------------]
-% [--CLASSIC CAPTURE--]
-% [-------------------]
-
 /**
   Check if a piece if a piece is between enemies
 **/
@@ -91,19 +87,36 @@ capturePiece(Board, X, Y, ModifiedBoard) :-
   setMatrixElement(Y, X, empty_cell, Board, ModifiedBoard).
 
 /**
-  Checks if a move caused at least one enemy soldier to be captured
-**/
-isEnemySoldierCaptured(Board, _, _, Xf, Yf) :- isEnemySoldierClassicallyCaptured(Board, Xf, Yf, next, horizontal).
-isEnemySoldierCaptured(Board, _, _, Xf, Yf) :- isEnemySoldierClassicallyCaptured(Board, Xf, Yf, before, horizontal).
-isEnemySoldierCaptured(Board, _, _, Xf, Yf) :- isEnemySoldierClassicallyCaptured(Board, Xf, Yf, next, vertical).
-isEnemySoldierCaptured(Board, _, _, Xf, Yf) :- isEnemySoldierClassicallyCaptured(Board, Xf, Yf, before, vertical).
-
-/**
   Check if a soldier around is captured by the classic rules
 **/
-isEnemySoldierClassicallyCaptured(Board, X, Y, Step, Direction) :-
+isEnemySoldierCapturedClassic(Board, Xf, Yf) :- isEnemySoldierCapturedClassic(Board, Xf, Yf, next, horizontal).
+isEnemySoldierCapturedClassic(Board, Xf, Yf) :- isEnemySoldierCapturedClassic(Board, Xf, Yf, before, horizontal).
+isEnemySoldierCapturedClassic(Board, Xf, Yf) :- isEnemySoldierCapturedClassic(Board, Xf, Yf, next, vertical).
+isEnemySoldierCapturedClassic(Board, Xf, Yf) :- isEnemySoldierCapturedClassic(Board, Xf, Yf, before, vertical).
+isEnemySoldierCapturedClassic(Board, X, Y, Step, Direction) :-
   stepDirection(X, Y, StepX, StepY, Step, Direction),
   isCaptured(Board, StepX, StepY).
+
+/**
+  Check if a soldier is captured by the XII rules
+**/
+isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPushAndCrush(Board, Xi, Yi, Xf, Yf, _, _).
+
+
+/**
+  Check if a move causes a Push and Crush attack
+**/
+isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :- 
+  getMatrixElement(Yi, Xi, Board, Piece),
+  getDirection(Xi, Yi, Xf, Yf, Direction),
+  getStep(Xi, Yi, Xf, Yf, Step, Direction),
+  stepDirection(Xf, Yf, FriendX, FriendY, Step, Direction),
+  getMatrixElement(FriendY, FriendX, Board, FriendPiece),
+  isFriend(Piece, FriendPiece),
+  stepDirection(FriendX, FriendY, EnemyX, EnemyY, Step, Direction),
+  getMatrixElement(EnemyY, EnemyX, Board, EnemyPiece),
+  isEnemy(Piece, EnemyPiece),
+  isSoldier(EnemyPiece).
 
 
 /**
@@ -144,3 +157,28 @@ isCaptured(Board, X, Y) :-
   isDux(Board, X, Y),
   getBlockedPaths(Board, X, Y, Counter),
   Counter =:= 4.
+
+
+capturePushAndCrush(Board, Xi, Yi, Xf, Yf, NewBoard) :-
+  isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY),
+  capturePiece(Board, EnemyX, EnemyY, NewBoard).
+capturePushAndCrush(Board, _, _, _, _, NewBoard) :-
+  NewBoard = Board.
+
+
+captureXII(Board, Xi, Yi, Xf, Yf, CaptureBoard) :-
+  capturePushAndCrush(Board, Xi, Yi, Xf, Yf, CaptureBoard).
+
+captureClassic(Board, Xf, Yf, Step, Direction, FinalBoard) :-
+  stepDirection(Xf, Yf, StepX, StepY, Step, Direction),
+  isInsideBoard(StepX, StepY),
+  isCaptured(Board, StepX, StepY),
+  capturePiece(Board, StepX, StepY, FinalBoard).
+captureClassic(Board, _, _, _, _, FinalBoard) :-
+  FinalBoard = Board.
+
+captureClassic(Board, Xf, Yf, FinalBoard) :-
+  captureClassic(Board, Xf, Yf, next, horizontal, Board2),
+  captureClassic(Board2, Xf, Yf, before, horizontal, Board3),
+  captureClassic(Board3, Xf, Yf, next, vertical, Board4),
+  captureClassic(Board4, Xf, Yf, before, vertical, FinalBoard).  

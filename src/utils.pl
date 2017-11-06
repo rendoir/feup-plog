@@ -39,6 +39,27 @@ nextStep(I,F,N) :-
    I > F,
    N is I - 1.
 
+getDirection(Xi, _, Xf, _, Direction) :-
+  Xi =:= Xf,
+  Direction = horizontal.
+getDirection(_, Yi, _, Yf, Direction) :-
+  Yi =:= Yf,
+  Direction = vertical.
+
+getStep(Xi, _, Xf, _, Step, horizontal) :-
+  Xf > Xi,
+  Step = next.
+getStep(Xi, _, Xf, _, Step, horizontal) :-
+  Xf < Xi,
+  Step = before.
+getStep(_, Yi, _, Yf, Step, vertical) :-
+  Yf > Yi,
+  Step = next.
+getStep(_, Yi, _, Yf, Step, vertical) :-
+  Yf < Yi,
+  Step = before.
+
+
 /**
   Calculates the maximum number of pieces that can be around a piece
 **/
