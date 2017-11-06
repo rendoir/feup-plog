@@ -105,6 +105,8 @@ isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPushAndCrush(Board, Xi, Yi
 
 /**
   Check if a move causes a Push and Crush attack
+  - Against the border
+  - Against a friendly piece
 **/
 isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :- 
   getMatrixElement(Yi, Xi, Board, Piece),
@@ -133,6 +135,29 @@ isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
   getMatrixElement(Friend2Y, Friend2X, Board, FriendPiece2),
   isFriend(Piece, FriendPiece2).
 
+
+/**
+  Check if a move causes a Flank attack
+**/
+isFlank(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
+  getMatrixElement(Yi, Xi, Board, Piece),
+  getDirection(Xi, Yi, Xf, Yf, Direction),
+  getStep(Xi, Yi, Xf, Yf, Step, Direction),
+  stepDirection(Xf, Yf, EnemyX, EnemyY, Step, Direction),
+  getMatrixElement(EnemyY, EnemyX, Board, EnemyPiece),
+  isEnemy(Piece, EnemyPiece),
+  isSoldier(EnemyPiece),
+  isLinearFormation(Board, Piece, EnemyX, EnemyY, Step, Direction).
+
+isLinearFormation(Board, Piece, X, Y, Step, Direction) :-
+  stepDirection(X, Y, EnemyX, EnemyY, Step, Direction),
+  getMatrixElement(EnemyY, EnemyX, Board, EnemyPiece),
+  isEnemy(Piece, EnemyPiece),
+  isLinearFormation(Board, Piece, EnemyX, EnemyY, Step, Direction).
+isLinearFormation(Board, Piece, X, Y, Step, Direction) :-
+  stepDirection(X, Y, FriendX, FriendY, Step, Direction),
+  getMatrixElement(FriendY, FriendX, Board, FriendPiece),
+  isFriend(Piece, FriendPiece).
 
 /**
   Check if a soldier should be captured
@@ -180,9 +205,16 @@ capturePushAndCrush(Board, Xi, Yi, Xf, Yf, NewBoard) :-
 capturePushAndCrush(Board, _, _, _, _, NewBoard) :-
   NewBoard = Board.
 
+captureFlank(Board, Xi, Yi, Xf, Yf, NewBoard) :-
+  isFlank(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY),
+  capturePiece(Board, EnemyX, EnemyY, NewBoard).
+captureFlank(Board, _, _, _, _, NewBoard) :-
+  NewBoard = Board.
+
 
 captureXII(Board, Xi, Yi, Xf, Yf, CaptureBoard) :-
-  capturePushAndCrush(Board, Xi, Yi, Xf, Yf, CaptureBoard).
+  capturePushAndCrush(Board, Xi, Yi, Xf, Yf, Board2),
+  captureFlank(Board2, Xi, Yi, Xf, Yf, CaptureBoard).
 
 captureClassic(Board, Xf, Yf, Step, Direction, FinalBoard) :-
   stepDirection(Xf, Yf, StepX, StepY, Step, Direction),

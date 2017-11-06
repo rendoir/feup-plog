@@ -26,10 +26,10 @@ initialBoard([
   	[white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
 
 
-isPlayer1(black_soldier).
-isPlayer1(black_dux).
-isPlayer2(white_soldier).
-isPlayer2(white_dux).
+isPlayer1(white_soldier).
+isPlayer1(white_dux).
+isPlayer2(black_soldier).
+isPlayer2(black_dux).
 
 isSoldier(Board, X, Y) :-
   getMatrixElement(Y, X, Board, Piece),
