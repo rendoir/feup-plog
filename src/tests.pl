@@ -116,8 +116,9 @@ testAll :-
   testLockedSoldier,
   testPushAndCrush,
   testFlank,
-	testDuxMobility,
-	testGameOver.
+  testDuxMobility,
+  testGameOver,
+  testPhalanx.
 
 testDuxCaptureCorner :-
   test_board(Board),

@@ -101,6 +101,8 @@ isEnemySoldierCapturedClassic(Board, X, Y, Step, Direction) :-
   Check if a soldier is captured by the XII rules
 **/
 isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPushAndCrush(Board, Xi, Yi, Xf, Yf, _, _).
+isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isFlank(Board, Xi, Yi, Xf, Yf, _, _).
+isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPhalanx(Board, Xi, Yi, Xf, Yf, _, _).
 
 
 /**
