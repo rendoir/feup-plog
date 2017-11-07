@@ -19,7 +19,7 @@ test_board([
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, black_soldier, empty_cell, empty_cell, empty_cell],
-  	[black_soldier, white_soldier, white_soldier, white_soldier, white_soldier, empty_cell, empty_cell, white_soldier]]).
+  [black_soldier, white_soldier, white_soldier, white_soldier, white_soldier, empty_cell, empty_cell, white_soldier]]).
 
 test_board_2([
 	[white_dux, black_soldier, black_soldier, black_soldier, empty_cell, black_soldier, black_soldier, black_soldier],
@@ -29,7 +29,7 @@ test_board_2([
 	[empty_cell, white_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-  	[black_soldier, empty_cell, white_soldier, empty_cell, white_soldier, empty_cell, empty_cell, white_soldier]]).
+  [black_soldier, empty_cell, white_soldier, empty_cell, white_soldier, empty_cell, empty_cell, white_soldier]]).
 
 test_board_3([
 	[black_dux, black_soldier, empty_cell, black_soldier, black_soldier, black_soldier, black_soldier, empty_cell],
@@ -39,7 +39,7 @@ test_board_3([
 	[black_dux, black_soldier, empty_cell, empty_cell, black_soldier, empty_cell, empty_cell, empty_cell],
 	[white_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-  	[empty_cell, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, empty_cell]]).
+  [empty_cell, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, empty_cell]]).
 
 test_board_4([
 	[empty_cell, black_soldier, empty_cell, black_soldier, black_soldier, white_soldier, empty_cell, empty_cell],
@@ -49,7 +49,7 @@ test_board_4([
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell, empty_cell],
-  	[empty_cell, white_soldier, black_soldier, white_soldier, white_soldier, black_soldier, white_soldier, white_soldier]]).
+  [empty_cell, white_soldier, black_soldier, white_soldier, white_soldier, black_soldier, white_soldier, white_soldier]]).
 
 test_board_5([
 	[empty_cell, black_soldier, empty_cell, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
@@ -59,7 +59,7 @@ test_board_5([
 	[empty_cell, empty_cell, black_soldier, white_soldier, black_soldier, empty_cell, empty_cell, black_soldier],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell],
-  	[empty_cell, empty_cell, white_soldier, white_soldier, white_soldier, empty_cell, white_soldier, white_soldier]]).
+  [empty_cell, empty_cell, white_soldier, white_soldier, white_soldier, empty_cell, white_soldier, white_soldier]]).
 
 test_board_6([
 	[white_soldier, empty_cell, empty_cell, black_soldier, black_soldier, white_soldier, white_soldier, empty_cell],
@@ -81,6 +81,16 @@ test_board_7([
 	[black_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[white_dux, empty_cell, empty_cell, white_soldier, black_soldier, empty_cell, empty_cell, empty_cell]]).
 
+test_board_8([
+	[black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
+	[empty_cell, empty_cell, empty_cell, black_dux, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell],
+  [white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
+
 
 testAll :-
   testDuxCaptureCorner,
@@ -97,7 +107,8 @@ testAll :-
   testLockedSoldier,
   testPushAndCrush,
   testFlank,
-	testDuxMobility.
+	testDuxMobility,
+	testGameOver.
 
 testDuxCaptureCorner :-
   test_board(Board),
@@ -224,3 +235,16 @@ testDuxMobility :-
 	drawBoard(Board3),
 	move(Board3, 7, 3, 4, 3, Board4),
 	drawBoard(Board4).
+
+testGameOver :-
+	test_board_8(Board),
+	not(gameIsOver(Board, _)),
+	drawBoard(Board),
+	move(Board, 2, 7, 2, 1, Board2),
+  drawBoard(Board2),
+	move(Board2, 4, 6, 4, 1, Board3),
+  drawBoard(Board3),
+	move(Board3, 3, 7, 3, 2, Board4),
+  drawBoard(Board4),
+	gameIsOver(Board4, Winner),
+	nl, write('Winner: '), write(Winner), nl.

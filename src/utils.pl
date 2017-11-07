@@ -22,6 +22,11 @@ setMatrixElement(ElementRow, ElementColumn, NewElement, [Row|RemainingRows], [Ro
 	NextRow is ElementRow - 1,
 	setMatrixElement(NextRow, ElementColumn, NewElement, RemainingRows, ModifiedRemainingRows).
 
+findMatrixElement([Row|_], ElementToSearch) :-
+	member(ElementToSearch, Row).
+findMatrixElement([_|RemainingRows], ElementToSearch) :-
+	findMatrixElement(RemainingRows, ElementToSearch).
+
 stepDirection(X, Y, StepX, StepY, Step, horizontal) :-
 	stepNumber(X, StepX, Step),
 	StepY is Y.

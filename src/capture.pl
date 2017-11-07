@@ -108,7 +108,7 @@ isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPushAndCrush(Board, Xi, Yi
   - Against the border
   - Against a friendly piece
 **/
-isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :- 
+isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
   getMatrixElement(Yi, Xi, Board, Piece),
   getDirection(Xi, Yi, Xf, Yf, Direction),
   getStep(Xi, Yi, Xf, Yf, Step, Direction),
@@ -120,7 +120,7 @@ isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
   isEnemy(Piece, EnemyPiece),
   isSoldier(EnemyPiece),
   isInBorder(EnemyX, EnemyY).
-isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :- 
+isPushAndCrush(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
   getMatrixElement(Yi, Xi, Board, Piece),
   getDirection(Xi, Yi, Xf, Yf, Direction),
   getStep(Xi, Yi, Xf, Yf, Step, Direction),
@@ -228,4 +228,11 @@ captureClassic(Board, Xf, Yf, FinalBoard) :-
   captureClassic(Board, Xf, Yf, next, horizontal, Board2),
   captureClassic(Board2, Xf, Yf, before, horizontal, Board3),
   captureClassic(Board3, Xf, Yf, next, vertical, Board4),
-  captureClassic(Board4, Xf, Yf, before, vertical, FinalBoard).  
+  captureClassic(Board4, Xf, Yf, before, vertical, FinalBoard).
+
+gameIsOver(Board, Winner) :-
+  not(findMatrixElement(Board, black_dux)),
+  Winner = 'White'.
+gameIsOver(Board, Winner) :-
+  not(findMatrixElement(Board, white_dux)),
+  Winner = 'Black'.
