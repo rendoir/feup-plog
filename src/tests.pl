@@ -94,12 +94,12 @@ test_board_8([
 test_board_9([
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, black_soldier, black_soldier, black_soldier, empty_cell, empty_cell, empty_cell, empty_cell],
-	[black_soldier, empty_cell, black_soldier, black_soldier, white_soldier, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, black_soldier, empty_cell],
+	[black_soldier, empty_cell, black_soldier, white_soldier, empty_cell, white_soldier, white_soldier, white_soldier],
+	[empty_cell, black_soldier, black_soldier, black_soldier, empty_cell, white_soldier, empty_cell, white_soldier],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
-	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell]]).
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, white_soldier, empty_cell]]).
 
 testAll :-
   testDuxCaptureCorner,
@@ -262,4 +262,6 @@ testPhalanx :-
   test_board_9(Board),
   drawBoard(Board),
   move(Board, 0, 3, 1, 3, Board2),
-  drawBoard(Board2).
+  drawBoard(Board2),
+  move(Board2, 6, 7, 6, 4, Board3),
+  drawBoard(Board3).

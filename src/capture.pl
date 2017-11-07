@@ -173,6 +173,7 @@ isPhalanx(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
   stepNDirection(Xf, Yf, EnemyX, EnemyY, Step, Direction, StepToEnemy),
   getMatrixElement(EnemyY, EnemyX, Board, Enemy),
   isEnemy(Piece, Enemy),
+  isSoldier(Enemy),
   checkTestudo(Board, Piece, Xf, Yf, Step, Direction, NumberFriends).
 
 checkTestudo(Board, Piece, Xf, Yf, Step, Direction, NumberFriends) :-
