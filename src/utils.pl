@@ -72,6 +72,9 @@ getStep(_, Yi, _, Yf, Step, vertical) :-
   Yf < Yi,
   Step = before.
 
+getOppositeDirection(horizontal, OppositeDirection) :- OppositeDirection = vertical.
+getOppositeDirection(vertical, OppositeDirection) :- OppositeDirection = horizontal.
+
 
 /**
   Calculates the maximum number of pieces that can be around a piece

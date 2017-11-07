@@ -261,4 +261,5 @@ testGameOver :-
 testPhalanx :-
   test_board_9(Board),
   drawBoard(Board),
-  isPhalanx(Board, 0, 3, 1, 3, _, _).
+  move(Board, 0, 3, 1, 3, Board2),
+  drawBoard(Board2).

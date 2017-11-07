@@ -172,7 +172,27 @@ isPhalanx(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
   StepToEnemy is NumberFriends + 1,
   stepNDirection(Xf, Yf, EnemyX, EnemyY, Step, Direction, StepToEnemy),
   getMatrixElement(EnemyY, EnemyX, Board, Enemy),
-  isEnemy(Piece, Enemy).
+  isEnemy(Piece, Enemy),
+  checkTestudo(Board, Piece, Xf, Yf, Step, Direction, NumberFriends).
+
+checkTestudo(Board, Piece, Xf, Yf, Step, Direction, NumberFriends) :-
+  getOppositeDirection(Direction, OppositeDirection),
+  stepDirection(Xf, Yf, NextLineX, NextLineY, next, OppositeDirection),
+  checkTestudoLine(Board, Piece, NextLineX, NextLineY, Step, Direction, NumberFriends).
+
+checkTestudo(Board, Piece, Xf, Yf, Step, Direction, NumberFriends) :-
+  getOppositeDirection(Direction, OppositeDirection),
+  stepDirection(Xf, Yf, NextLineX, NextLineY, before, OppositeDirection),
+  checkTestudoLine(Board, Piece, NextLineX, NextLineY, Step, Direction, NumberFriends).
+
+checkTestudoLine(_, _, _, _, _, _, -1).
+checkTestudoLine(Board, Piece, X, Y, Step, Direction, NumberFriends) :-
+  getMatrixElement(Y, X, Board, FriendPiece),
+  isFriend(Piece, FriendPiece),
+  stepDirection(X, Y, StepX, StepY, Step, Direction),
+  FriendsLeft is NumberFriends - 1,
+  checkTestudoLine(Board, Piece, StepX, StepY, Step, Direction, FriendsLeft).
+
 
 isNextFriend(Board, Piece, X, Y, NextX, NextY, Step, Direction, Result) :-
   stepDirection(X, Y, NextX, NextY, Step, Direction),
@@ -193,11 +213,6 @@ getLinearFriends(Board, Piece, X, Y, Step, Direction, Counter, 1, FinalCounter) 
   isNextFriend(Board, Piece, X, Y, NextX, NextY, Step, Direction, Result),
   NextCounter is Result + Counter,
   getLinearFriends(Board, Piece, NextX, NextY, Step, Direction, NextCounter, Result, FinalCounter).
-  
-/*isEnemyAfterLinearFriends(Board, Piece, X, Y, Step, Direction) :-
-  stepDirection(X, Y, FriendX, FriendY, Step, Direction),
-  getMatrixElement(FriendY, FriendX, Board, FriendPiece),
-  isFriend(Piece, FriendPiece).*/
 
 
 /**
@@ -252,10 +267,16 @@ captureFlank(Board, Xi, Yi, Xf, Yf, NewBoard) :-
 captureFlank(Board, _, _, _, _, NewBoard) :-
   NewBoard = Board.
 
+capturePhalanx(Board, Xi, Yi, Xf, Yf, NewBoard) :-
+  isPhalanx(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY),
+  capturePiece(Board, EnemyX, EnemyY, NewBoard).
+capturePhalanx(Board, _, _, _, _, NewBoard) :-
+  NewBoard = Board.
 
 captureXII(Board, Xi, Yi, Xf, Yf, CaptureBoard) :-
   capturePushAndCrush(Board, Xi, Yi, Xf, Yf, Board2),
-  captureFlank(Board2, Xi, Yi, Xf, Yf, CaptureBoard).
+  captureFlank(Board2, Xi, Yi, Xf, Yf, Board3),
+  capturePhalanx(Board3, Xi, Yi, Xf, Yf, CaptureBoard).
 
 captureClassic(Board, Xf, Yf, Step, Direction, FinalBoard) :-
   stepDirection(Xf, Yf, StepX, StepY, Step, Direction),
