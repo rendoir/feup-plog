@@ -71,6 +71,16 @@ test_board_6([
 	[black_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
 	[white_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell]]).
 
+test_board_7([
+	[black_soldier, empty_cell, empty_cell, black_dux, white_soldier, empty_cell, empty_cell, empty_cell],
+	[black_dux, empty_cell, white_soldier, empty_cell, white_soldier, empty_cell, empty_cell, empty_cell],
+	[white_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, white_soldier],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, white_dux],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, white_soldier],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[black_soldier, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[white_dux, empty_cell, empty_cell, white_soldier, black_soldier, empty_cell, empty_cell, empty_cell]]).
+
 
 testAll :-
   testDuxCaptureCorner,
@@ -86,7 +96,8 @@ testAll :-
   testOffensiveDefensiveMove2,
   testLockedSoldier,
   testPushAndCrush,
-  testFlank.
+  testFlank,
+	testDuxMobility.
 
 testDuxCaptureCorner :-
   test_board(Board),
@@ -200,3 +211,16 @@ testFlank :-
   drawBoard(Board3),
   move(Board3, 4, 4, 5, 4, Board4),
   drawBoard(Board4).
+
+testDuxMobility :-
+	test_board_7(Board),
+  drawBoard(Board),
+	not(move(Board, 0, 1, 1, 1, Board)),
+  not(move(Board, 0, 7, 1, 7, Board)),
+	not(move(Board, 3, 0, 3, 3, Board)),
+	move(Board, 3, 0, 3, 1, Board2),
+	drawBoard(Board2),
+	move(Board2, 3, 1, 3, 6, Board3),
+	drawBoard(Board3),
+	move(Board3, 7, 3, 4, 3, Board4),
+	drawBoard(Board4).
