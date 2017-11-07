@@ -27,6 +27,14 @@ findMatrixElement([Row|_], ElementToSearch) :-
 findMatrixElement([_|RemainingRows], ElementToSearch) :-
 	findMatrixElement(RemainingRows, ElementToSearch).
 
+stepNDirection(X, Y, StepX, StepY, _, _, 0) :-
+  StepX = X,
+  StepY = Y.
+stepNDirection(X, Y, StepX, StepY, Step, Direction, Number) :-
+  stepDirection(X, Y, TempStepX, TempStepY, Step, Direction),
+  NextNumber is Number - 1,
+  stepNDirection(TempStepX, TempStepY, StepX, StepY, Step, Direction, NextNumber).
+  
 stepDirection(X, Y, StepX, StepY, Step, horizontal) :-
 	stepNumber(X, StepX, Step),
 	StepY is Y.

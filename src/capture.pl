@@ -159,6 +159,47 @@ isLinearFormation(Board, Piece, X, Y, Step, Direction) :-
   getMatrixElement(FriendY, FriendX, Board, FriendPiece),
   isFriend(Piece, FriendPiece).
 
+
+/**
+  Check if a move causes a Phalanx attack
+**/
+isPhalanx(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
+  getMatrixElement(Yi, Xi, Board, Piece),
+  getDirection(Xi, Yi, Xf, Yf, Direction),
+  getStep(Xi, Yi, Xf, Yf, Step, Direction),
+  getLinearFriends(Board, Piece, Xf, Yf, Step, Direction, NumberFriends),
+  NumberFriends >= 1,
+  StepToEnemy is NumberFriends + 1,
+  stepNDirection(Xf, Yf, EnemyX, EnemyY, Step, Direction, StepToEnemy),
+  getMatrixElement(EnemyY, EnemyX, Board, Enemy),
+  isEnemy(Piece, Enemy).
+
+isNextFriend(Board, Piece, X, Y, NextX, NextY, Step, Direction, Result) :-
+  stepDirection(X, Y, NextX, NextY, Step, Direction),
+  getMatrixElement(NextY, NextX, Board, FriendPiece),
+  isFriend(Piece, FriendPiece),
+  Result is 1.
+isNextFriend(_, _, _, _, _, _, _, _, Result) :- 
+  Result is 0.
+
+getLinearFriends(Board, Piece, X, Y, Step, Direction, NumberFriends) :-
+  getLinearFriends(Board, Piece, X, Y, Step, Direction, 0, 1, FinalCounter),
+  NumberFriends = FinalCounter.
+
+getLinearFriends(_, _, _, _, _, _, Counter, 0, FinalCounter) :- 
+  FinalCounter = Counter.
+
+getLinearFriends(Board, Piece, X, Y, Step, Direction, Counter, 1, FinalCounter) :-
+  isNextFriend(Board, Piece, X, Y, NextX, NextY, Step, Direction, Result),
+  NextCounter is Result + Counter,
+  getLinearFriends(Board, Piece, NextX, NextY, Step, Direction, NextCounter, Result, FinalCounter).
+  
+/*isEnemyAfterLinearFriends(Board, Piece, X, Y, Step, Direction) :-
+  stepDirection(X, Y, FriendX, FriendY, Step, Direction),
+  getMatrixElement(FriendY, FriendX, Board, FriendPiece),
+  isFriend(Piece, FriendPiece).*/
+
+
 /**
   Check if a soldier should be captured
 **/
@@ -235,4 +276,10 @@ gameIsOver(Board, Winner) :-
   Winner = 'White'.
 gameIsOver(Board, Winner) :-
   not(findMatrixElement(Board, white_dux)),
+  Winner = 'Black'.
+gameIsOver(Board, Winner) :-
+  not(findMatrixElement(Board, black_soldier)),
+  Winner = 'White'.
+gameIsOver(Board, Winner) :-
+  not(findMatrixElement(Board, white_soldier)),
   Winner = 'Black'.

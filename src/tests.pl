@@ -91,6 +91,15 @@ test_board_8([
 	[empty_cell, empty_cell, empty_cell, empty_cell, white_dux, empty_cell, empty_cell, empty_cell],
   [white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier, white_soldier]]).
 
+test_board_9([
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, black_soldier, black_soldier, black_soldier, empty_cell, empty_cell, empty_cell, empty_cell],
+	[black_soldier, empty_cell, black_soldier, black_soldier, white_soldier, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell],
+	[empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell, empty_cell]]).
 
 testAll :-
   testDuxCaptureCorner,
@@ -248,3 +257,8 @@ testGameOver :-
   drawBoard(Board4),
 	gameIsOver(Board4, Winner),
 	nl, write('Winner: '), write(Winner), nl.
+
+testPhalanx :-
+  test_board_9(Board),
+  drawBoard(Board),
+  isPhalanx(Board, 0, 3, 1, 3, _, _).
