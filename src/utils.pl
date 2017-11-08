@@ -34,7 +34,7 @@ stepNDirection(X, Y, StepX, StepY, Step, Direction, Number) :-
   stepDirection(X, Y, TempStepX, TempStepY, Step, Direction),
   NextNumber is Number - 1,
   stepNDirection(TempStepX, TempStepY, StepX, StepY, Step, Direction, NextNumber).
-  
+
 stepDirection(X, Y, StepX, StepY, Step, horizontal) :-
 	stepNumber(X, StepX, Step),
 	StepY is Y.
@@ -100,3 +100,23 @@ abs(Number, Absolute) :-
   Absolute is Number.
 abs(Number, Absolute) :-
   Absolute is Number * (-1).
+
+/*readOption(Number, Minimum, Maximum) :-
+	get_code(Temp),
+	get_code(_),
+	Number is Temp - 48,
+	Number >= Minimum,
+	Number =< Maximum.
+
+readCoordinates(X, Y) :-
+	get_code(TmpX),
+	get_code(_),
+	get_code(TmpY),
+	get_code(_),
+	X is TmpX - 48,
+	Y is TmpY - 48,
+	isInsideBoard(X, Y).*/
+
+readNumber(Number) :-
+	read(Number),
+	integer(Number).

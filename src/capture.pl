@@ -102,7 +102,7 @@ isEnemySoldierCapturedClassic(Board, X, Y, Step, Direction) :-
 **/
 isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPushAndCrush(Board, Xi, Yi, Xf, Yf, _, _).
 isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isFlank(Board, Xi, Yi, Xf, Yf, _, _).
-isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPhalanx(Board, Xi, Yi, Xf, Yf, _, _).
+%isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPhalanx(Board, Xi, Yi, Xf, Yf, _, _).
 
 
 /**
@@ -202,14 +202,14 @@ isNextFriend(Board, Piece, X, Y, NextX, NextY, Step, Direction, Result) :-
   getMatrixElement(NextY, NextX, Board, FriendPiece),
   isFriend(Piece, FriendPiece),
   Result is 1.
-isNextFriend(_, _, _, _, _, _, _, _, Result) :- 
+isNextFriend(_, _, _, _, _, _, _, _, Result) :-
   Result is 0.
 
 getLinearFriends(Board, Piece, X, Y, Step, Direction, NumberFriends) :-
   getLinearFriends(Board, Piece, X, Y, Step, Direction, 0, 1, FinalCounter),
   NumberFriends = FinalCounter.
 
-getLinearFriends(_, _, _, _, _, _, Counter, 0, FinalCounter) :- 
+getLinearFriends(_, _, _, _, _, _, Counter, 0, FinalCounter) :-
   FinalCounter = Counter.
 
 getLinearFriends(Board, Piece, X, Y, Step, Direction, Counter, 1, FinalCounter) :-
@@ -270,16 +270,16 @@ captureFlank(Board, Xi, Yi, Xf, Yf, NewBoard) :-
 captureFlank(Board, _, _, _, _, NewBoard) :-
   NewBoard = Board.
 
-capturePhalanx(Board, Xi, Yi, Xf, Yf, NewBoard) :-
+/*capturePhalanx(Board, Xi, Yi, Xf, Yf, NewBoard) :-
   isPhalanx(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY),
   capturePiece(Board, EnemyX, EnemyY, NewBoard).
 capturePhalanx(Board, _, _, _, _, NewBoard) :-
-  NewBoard = Board.
+  NewBoard = Board.*/
 
 captureXII(Board, Xi, Yi, Xf, Yf, CaptureBoard) :-
   capturePushAndCrush(Board, Xi, Yi, Xf, Yf, Board2),
-  captureFlank(Board2, Xi, Yi, Xf, Yf, Board3),
-  capturePhalanx(Board3, Xi, Yi, Xf, Yf, CaptureBoard).
+  captureFlank(Board2, Xi, Yi, Xf, Yf, CaptureBoard).
+  %capturePhalanx(Board3, Xi, Yi, Xf, Yf, CaptureBoard).
 
 captureClassic(Board, Xf, Yf, Step, Direction, FinalBoard) :-
   stepDirection(Xf, Yf, StepX, StepY, Step, Direction),
@@ -297,13 +297,17 @@ captureClassic(Board, Xf, Yf, FinalBoard) :-
 
 gameIsOver(Board, Winner) :-
   not(findMatrixElement(Board, black_dux)),
-  Winner = 'White'.
+  Winner = 'White',
+  write('Winner:'), write(Winner), nl.
 gameIsOver(Board, Winner) :-
   not(findMatrixElement(Board, white_dux)),
-  Winner = 'Black'.
+  Winner = 'Black',
+  write('Winner:'), write(Winner), nl.
 gameIsOver(Board, Winner) :-
   not(findMatrixElement(Board, black_soldier)),
-  Winner = 'White'.
+  Winner = 'White',
+  write('Winner:'), write(Winner), nl.
 gameIsOver(Board, Winner) :-
   not(findMatrixElement(Board, white_soldier)),
-  Winner = 'Black'.
+  Winner = 'Black',
+  write('Winner:'), write(Winner), nl.

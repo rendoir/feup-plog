@@ -1,56 +1,59 @@
-
-% [--------------------]
-% [------Includes------]
-% [--------------------]
-
 :- include('moves.pl').
 :- include('board_draw.pl').
-:- include('utils.pl').
+:- include('board_state.pl').
 
-% [--------------------]
-% [--------GAME--------]
-% [--------------------]
+printMenu :-
+  clearScreen,
+	write('--------------------------------'), nl,
+	write('-        Latrunculi XII        -'), nl,
+	write('--------------------------------'), nl,
+	write('-                              -'), nl,
+	write('-   1. Player vs Player        -'), nl,
+	write('-   2. Player vs Computer      -'), nl,
+	write('-   3. Computer vs Computer    -'), nl,
+	write('-   4. Exit                    -'), nl,
+	write('-                              -'), nl,
+	write('--------------------------------'), nl,
+	write('Choose a game mode:'), nl.
 
-inputCellOfBoard(X, Y) :-
-    write('X:'),
-    nl,
-    read(X),
-    write('Y:'),
-    nl,
-    read(Y).
+play(1) :- playPlayerVsPlayer.
+play(2) :- playPlayerVsComputer.
+play(3) :- playComputerVsComputer.
+play(4).
 
+isPieceOfPlayer(Board, Player, X, Y) :-
+  getMatrixElement(Y, X, Board, Piece),
+  isPlayer(Player, Piece).
 
-isPieceOfPlayer1(Board, X, Y) :-
-    getMatrixElement(Y, X, Board, Element),
-    isPlayer1(Element).
+playPlayerVsPlayer :-
+  initialBoard(Board),
+  drawBoard(Board),
+  gameLoopPlayerVsPlayer(Board).
 
-play_player1(Board, NewBoard) :-
-    write('Player1: Select piece to move'), nl,
-    !,
-    inputCellOfBoard(Xi, Yi),
-    isPieceOfPlayer1(Board, Xi, Yi),
-    write('Player1: Select destination cell'), nl,
-    inputCellOfBoard(Xf, Yf),
-    move(Board,Xi,Yi,Xf,Yf, NewBoard).
+playPlayer(Board, Player, NewBoard) :-
+  write('Player '), write(Player), write(':'), nl,
+  write('Enter source coordinates:'), nl,
+  readNumber(Xi),
+  readNumber(Yi),
+  isPieceOfPlayer(Board, Player, Xi, Yi),
+  write('Enter destination coordinates:'), nl,
+  readNumber(Xf),
+  readNumber(Yf),
+  move(Board, Xi, Yi, Xf, Yf, NewBoard).
 
+gameLoopPlayerVsPlayer(Board) :-
+  playPlayer(Board, 1, Board2),
+  drawBoard(Board2),
+  not(gameIsOver(Board2, _)),
+  playPlayer(Board2, 2, Board3),
+  drawBoard(Board3),
+  not(gameIsOver(Board3, _)),
+  gameLoopPlayerVsPlayer(Board3).
 
-isPieceOfPlayer2(Board, X, Y) :-
-    getMatrixElement(Y, X, Board, Element),
-    isPlayer2(Element).
+mainMenu(Option) :-
+  printMenu,
+  readNumber(Option).
 
-play_player2(Board, NewBoard) :-
-    write('Player2: Select piece to move'), nl,
-    !,
-    inputCellOfBoard(Xi, Yi),
-    isPieceOfPlayer2(Board, Xi, Yi),
-    write('Player2: Select destination cell'), nl,
-    inputCellOfBoard(Xf, Yf),
-    move(Board,Xi,Yi,Xf,Yf, NewBoard).
-
-play(Board) :-
-    drawBoard(Board),
-    play_player1(Board, NewBoard),
-    drawBoard(NewBoard),
-    play_player2(NewBoard, FinalBoard),
-    % isEndOfGame(FinalBoard),
-    play(FinalBoard).
+main :-
+  mainMenu(Option),
+  play(Option).

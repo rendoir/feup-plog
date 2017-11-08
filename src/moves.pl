@@ -17,7 +17,7 @@ isElementBetween(Board, Xi, Yi, Xf, Yf) :-
   getMatrixElement(Yn, Xf, Board, CurrentCell),
   isEmptyCell(CurrentCell),
   isElementBetween(Board, Xi, Yn, Xf, Yf).
-  
+
 
 /**
   Checks if the move is orthogonal.
@@ -35,12 +35,12 @@ friendDuxImmobilized(Board, Xi, Yi, Xf, Yf) :- friendDuxImmobilized(Board, Xi, Y
 friendDuxImmobilized(Board, Xi, Yi, Xf, Yf) :- friendDuxImmobilized(Board, Xi, Yi, Xf, Yf, before, vertical).
 friendDuxImmobilized(Board, Xi, Yi, Xf, Yf, Step, Direction) :-
   getMatrixElement(Yi, Xi, Board, PieceToMove),
-  stepDirection(Xf, Yf, StepX, StepY, Step, Direction),  
+  stepDirection(Xf, Yf, StepX, StepY, Step, Direction),
   getMatrixElement(StepY, StepX, Board, AdjacentPiece),
   isDux(AdjacentPiece),
   isFriend(AdjacentPiece, PieceToMove),
   getFriendsAround(Board, StepX, StepY, CounterF),
-  getEnemiesAround(Board, StepX, StepY, CounterE),  
+  getEnemiesAround(Board, StepX, StepY, CounterE),
   Counter is CounterF + CounterE,
   getMaxPiecesAround(StepX, StepY, Max),
   DuxMax is Max - 1,
@@ -59,7 +59,7 @@ isEnemyDuxAround(Board, X, Y, Step, Direction) :-
   stepDirection(X, Y, StepX, StepY, Step, Direction),
   getMatrixElement(StepY, StepX, Board, AdjacentPiece),
   isDux(AdjacentPiece),
-  isEnemy(AdjacentPiece, Piece).  
+  isEnemy(AdjacentPiece, Piece).
 
 
 /**
@@ -114,7 +114,7 @@ checkLockedSoldier(Board, Xi, Yi, _, _) :-
   not(checkLockedSoldier(Board, Xi, Yi, _, _, before, horizontal)),
   not(checkLockedSoldier(Board, Xi, Yi, _, _, next, vertical)),
   not(checkLockedSoldier(Board, Xi, Yi, _, _, before, vertical)).
-checkLockedSoldier(Board, X, Y, _, _, Step, Direction) :- 
+checkLockedSoldier(Board, X, Y, _, _, Step, Direction) :-
   getMatrixElement(Y, X, Board, Piece),
   stepDirection(X, Y, StepX, StepY, Step, Direction),
   getMatrixElement(StepY, StepX, Board, Adjacent),
@@ -126,9 +126,9 @@ checkLockedSoldier(Board, X, Y, _, _, Step, Direction) :-
   Check if the mobility rules of the dux allow him to move
 **/
 checkDuxMobility(Board, Xi, Yi, _, _) :- not(isDux(Board, Xi, Yi)).
-checkDuxMobility(Board, Xi, Yi, Xf, Yf) :- 
+checkDuxMobility(Board, Xi, Yi, Xf, Yf) :-
   getBlockedPaths(Board, Xi, Yi, BlockedPaths),
-  checkDuxMobility(Board, Xi, Yi, Xf, Yf, BlockedPaths).   
+  checkDuxMobility(Board, Xi, Yi, Xf, Yf, BlockedPaths).
 
 checkDuxMobility(_, _, _, _, _, 0).
 
@@ -143,7 +143,7 @@ checkDuxMobility(Board, Xi, Yi, Xf, Yf, 2) :-
   not(isInCorner(Xi, Yi)),
   not(isInBorder(Xi, Yi)),
   moveIsOffensive(Board, Xi, Yi, Xf, Yf).
-    
+
 
 /**
   Moves a piece from (Xi, Yi) to (Xf, Yf). This substitutes (Xf, Yf) with the cell atom from (Xi, Yi) and sets (Xi, Yi) with the empty cell atom.
@@ -163,10 +163,10 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   checkLockedSoldier(Board, Xi, Yi, Xf, Yf),
   checkDuxMobility(Board, Xi, Yi, Xf, Yf),
   not(friendDuxImmobilized(Board, Xi, Yi, Xf, Yf)),
-  
+
   captureXII(Board, Xi, Yi, Xf, Yf, CaptureBoard),
 
   setMatrixElement(Yi, Xi, empty_cell, CaptureBoard, MovedBoard),
   setMatrixElement(Yf, Xf, FromCell, MovedBoard, MovedBoard2),
-  
+
   captureClassic(MovedBoard2, Xf, Yf, FinalBoard).
