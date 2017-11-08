@@ -170,15 +170,11 @@ isPhalanx(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
   getDirection(Xi, Yi, Xf, Yf, Direction),
   getStep(Xi, Yi, Xf, Yf, Step, Direction),
   getLinearFriends(Board, Piece, Xf, Yf, Step, Direction, NumberFriends),
-  write('Friends in line: '), write(NumberFriends), nl,
   NumberFriends >= 1,
   StepToEnemy is NumberFriends + 1,
   stepNDirection(Xf, Yf, EnemyX, EnemyY, Step, Direction, StepToEnemy),
-  write('EnemyX='), write(EnemyX), write('EnemyY='), write(EnemyY), nl,
   getMatrixElement(EnemyY, EnemyX, Board, Enemy),
-  write('Enemy='), write(Enemy), nl,
   isEnemy(Piece, Enemy),
-  write('isEnemy'), nl,
   isSoldier(Enemy),
   checkTestudo(Board, Piece, Xf, Yf, Step, Direction, NumberFriends).
 
@@ -301,16 +297,16 @@ captureClassic(Board, Xf, Yf, FinalBoard) :-
 gameIsOver(Board, Winner) :-
   not(findMatrixElement(Board, black_dux)),
   Winner = 'White',
-  write('Winner:'), write(Winner), nl.
+  write('Winner: '), write(Winner), nl.
 gameIsOver(Board, Winner) :-
   not(findMatrixElement(Board, white_dux)),
   Winner = 'Black',
-  write('Winner:'), write(Winner), nl.
+  write('Winner: '), write(Winner), nl.
 gameIsOver(Board, Winner) :-
   not(findMatrixElement(Board, black_soldier)),
   Winner = 'White',
-  write('Winner:'), write(Winner), nl.
+  write('Winner: '), write(Winner), nl.
 gameIsOver(Board, Winner) :-
   not(findMatrixElement(Board, white_soldier)),
   Winner = 'Black',
-  write('Winner:'), write(Winner), nl.
+  write('Winner: '), write(Winner), nl.

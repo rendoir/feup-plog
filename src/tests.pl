@@ -190,7 +190,6 @@ testOffensiveDefensiveMove :-
   move(Board, 4, 0, 4, 2, Board2),
   drawBoard(Board2),
   moveIsDefensive(Board2, 3, 0, 4, 0),
-	write('move is defensive') , nl,
   move(Board2, 3, 0, 4, 0, Board3),
   drawBoard(Board3).
 
@@ -257,8 +256,7 @@ testGameOver :-
   drawBoard(Board3),
 	move(Board3, 3, 7, 3, 2, Board4),
   drawBoard(Board4),
-	gameIsOver(Board4, Winner),
-	nl, write('Winner: '), write(Winner), nl.
+	gameIsOver(Board4, _).
 
 testPhalanx :-
   test_board_9(Board),

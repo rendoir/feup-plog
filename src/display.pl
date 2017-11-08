@@ -5,7 +5,7 @@
 
 drawBoard([Line | Remainder]) :-
   drawBoardHeader,
-  drawBoardRest([Line | Remainder], 0).
+  drawBoardRest([Line | Remainder], 0), nl.
 
 
 drawBoardHeader :- 

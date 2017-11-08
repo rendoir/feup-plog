@@ -6,13 +6,13 @@
 **/
 isElementBetween(_, X, Y, X, Y).
 isElementBetween(Board, Xi, Yi, Xf, Yf) :-
-  Yf = Yi, /*Horizontal Move*/
+  Yf = Yi,
   nextStep(Xi,Xf,Xn),
   getMatrixElement(Yf, Xn, Board, CurrentCell),
   isEmptyCell(CurrentCell),
   isElementBetween(Board, Xn, Yi, Xf, Yf).
 isElementBetween(Board, Xi, Yi, Xf, Yf) :-
-  Xf = Xi, /*Vertical Move*/
+  Xf = Xi,
   nextStep(Yi,Yf,Yn),
   getMatrixElement(Yn, Xf, Board, CurrentCell),
   isEmptyCell(CurrentCell),
