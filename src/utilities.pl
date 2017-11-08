@@ -1,3 +1,5 @@
+:- use_module(library(random)).
+
 getListElement(0, [HeadElement | _], HeadElement).
 getListElement(Index, [_ | RemainingElements], Element):-
 	NewIndex is Index - 1,

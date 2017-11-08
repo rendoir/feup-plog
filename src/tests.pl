@@ -3,7 +3,6 @@
 % [------Includes------]
 % [--------------------]
 
-:- include('board.pl').
 :- include('display.pl').
 :- include('moves.pl').
 

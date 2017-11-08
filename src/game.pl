@@ -1,6 +1,5 @@
-:- include('moves.pl').
 :- include('display.pl').
-:- include('board.pl').
+:- include('bot.pl').
 
 /*******************************
             Common
@@ -8,29 +7,45 @@
 
 printMenu :-
   clearScreen,
-	write('--------------------------------'), nl,
-	write('-        Latrunculi XII        -'), nl,
-	write('--------------------------------'), nl,
-	write('-                              -'), nl,
-	write('-   1. Player vs Player        -'), nl,
-	write('-   2. Player vs Computer      -'), nl,
-	write('-   3. Computer vs Computer    -'), nl,
-	write('-   4. Exit                    -'), nl,
-	write('-                              -'), nl,
-	write('--------------------------------'), nl,
-	write('Choose an option:'), nl.
+  write('--------------------------------'), nl,
+  write('-        Latrunculi XII        -'), nl,
+  write('--------------------------------'), nl,
+  write('-                              -'), nl,
+  write('-   1. Player vs Player        -'), nl,
+  write('-   2. Player vs Computer      -'), nl,
+  write('-   3. Computer vs Computer    -'), nl,
+  write('-   4. Exit                    -'), nl,
+  write('-                              -'), nl,
+  write('--------------------------------'), nl,
+  write('Choose a game mode:'), nl.
+
+printDifficultyMenu :-
+  clearScreen,
+  write('--------------------------------'), nl,
+  write('-        Latrunculi XII        -'), nl,
+  write('--------------------------------'), nl,
+  write('-                              -'), nl,
+  write('-   1. Dumb Bot                -'), nl,
+  write('-   2. Intelligent Bot         -'), nl,
+  write('-                              -'), nl,
+  write('--------------------------------'), nl,
+  write('Choose a bot difficulty:'), nl.
 
 main :-
   mainMenu(Option),
   play(Option).
+
+difficultyMenu(Difficulty) :-
+  printDifficultyMenu,
+  readOption(Difficulty, 1, 2).
 
 mainMenu(Option) :-
   printMenu,
   readOption(Option, 1, 4).
 
 play(1) :- playPlayerVsPlayer.
-play(2) :- playPlayerVsComputer.
-play(3) :- playComputerVsComputer.
+play(2) :- difficultyMenu(Difficulty), playPlayerVsComputer(Difficulty).
+play(3) :- difficultyMenu(Difficulty), playComputerVsComputer(Difficulty).
 play(4).
 
 isPieceOfPlayer(Board, Player, X, Y) :-
@@ -48,10 +63,10 @@ playPlayer(Board, Player, NewBoard) :-
   move(Board, Xi, Yi, Xf, Yf, NewBoard),
   !.
 
-playComputer(Board, Player, NewBoard) :-
+playComputer(Board, Player, NewBoard, Difficulty) :-
   write('Computer '), write(Player), nl,
   pressEnterToContinue,
-  moveComputer(Board, Player, NewBoard).
+  moveComputer(Board, Player, NewBoard, Difficulty).
 
 
 /*******************************
@@ -81,23 +96,23 @@ gameLoopPlayerVsPlayer(_).
        Player vs Computer
 *******************************/
 
-playPlayerVsComputer :-
+playPlayerVsComputer(Difficulty) :-
   clearScreen,
   initialBoard(Board),
   drawBoard(Board),
-  gameLoopPlayerVsComputer(Board).
+  gameLoopPlayerVsComputer(Board, Difficulty).
   
-gameLoopPlayerVsComputer(Board) :-
+gameLoopPlayerVsComputer(Board, Difficulty) :-
   playPlayer(Board, 1, Board2),
   clearScreen,
   drawBoard(Board2),
   not(gameIsOver(Board2, _)),
-  playComputer(Board2, 2, Board3),
+  playComputer(Board2, 2, Board3, Difficulty),
   clearScreen,
   drawBoard(Board3),
   not(gameIsOver(Board3, _)),
-  gameLoopPlayerVsComputer(Board3).
-gameLoopPlayerVsComputer(_).
+  gameLoopPlayerVsComputer(Board3, Difficulty).
+gameLoopPlayerVsComputer(_, _).
 
 
 /*******************************
@@ -110,14 +125,14 @@ playComputerVsComputer :-
   drawBoard(Board),
   gameLoopComputerVsComputer(Board).
   
-gameLoopComputerVsComputer(Board) :-
-  playComputer(Board, 1, Board2),
+gameLoopComputerVsComputer(Board, Difficulty) :-
+  playComputer(Board, 1, Board2, Difficulty),
   clearScreen,
   drawBoard(Board2),
   not(gameIsOver(Board2, _)),
-  playComputer(Board2, 2, Board3),
+  playComputer(Board2, 2, Board3, Difficulty),
   clearScreen,
   drawBoard(Board3),
   not(gameIsOver(Board3, _)),
-  gameLoopComputerVsComputer(Board3).
-gameLoopComputerVsComputer(_).
+  gameLoopComputerVsComputer(Board3, Difficulty).
+gameLoopComputerVsComputer(_,_).

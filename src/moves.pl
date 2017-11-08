@@ -1,5 +1,6 @@
 :-include('captures.pl').
 :-include('utilities.pl').
+:-include('board.pl').
 
 /**
   Checks if there is an element between (Xi, Yi) and (Xf, Yf).
@@ -170,3 +171,9 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   setMatrixElement(Yf, Xf, FromCell, MovedBoard, MovedBoard2),
 
   captureClassic(MovedBoard2, Xf, Yf, FinalBoard).
+
+
+move(Player, Board, Xi, Yi, Xf, Yf, FinalBoard) :-
+  getMatrixElement(Yi, Xi, Board, Piece),
+  isPlayer(Player, Piece),
+  move(Board, Xi, Yi, Xf, Yf, FinalBoard).
