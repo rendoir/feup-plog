@@ -31,6 +31,7 @@ stepNDirection(X, Y, StepX, StepY, _, _, 0) :-
   StepX = X,
   StepY = Y.
 stepNDirection(X, Y, StepX, StepY, Step, Direction, Number) :-
+	Number > 0,
   stepDirection(X, Y, TempStepX, TempStepY, Step, Direction),
   NextNumber is Number - 1,
   stepNDirection(TempStepX, TempStepY, StepX, StepY, Step, Direction, NextNumber).

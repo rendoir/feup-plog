@@ -190,6 +190,7 @@ testOffensiveDefensiveMove :-
   move(Board, 4, 0, 4, 2, Board2),
   drawBoard(Board2),
   moveIsDefensive(Board2, 3, 0, 4, 0),
+	write('move is defensive') , nl,
   move(Board2, 3, 0, 4, 0, Board3),
   drawBoard(Board3).
 

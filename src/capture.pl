@@ -102,7 +102,7 @@ isEnemySoldierCapturedClassic(Board, X, Y, Step, Direction) :-
 **/
 isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPushAndCrush(Board, Xi, Yi, Xf, Yf, _, _).
 isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isFlank(Board, Xi, Yi, Xf, Yf, _, _).
-%isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPhalanx(Board, Xi, Yi, Xf, Yf, _, _).
+isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf) :- isPhalanx(Board, Xi, Yi, Xf, Yf, _, _).
 
 
 /**
@@ -170,11 +170,15 @@ isPhalanx(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY) :-
   getDirection(Xi, Yi, Xf, Yf, Direction),
   getStep(Xi, Yi, Xf, Yf, Step, Direction),
   getLinearFriends(Board, Piece, Xf, Yf, Step, Direction, NumberFriends),
+  write('Friends in line: '), write(NumberFriends), nl,
   NumberFriends >= 1,
   StepToEnemy is NumberFriends + 1,
   stepNDirection(Xf, Yf, EnemyX, EnemyY, Step, Direction, StepToEnemy),
+  write('EnemyX='), write(EnemyX), write('EnemyY='), write(EnemyY), nl,
   getMatrixElement(EnemyY, EnemyX, Board, Enemy),
+  write('Enemy='), write(Enemy), nl,
   isEnemy(Piece, Enemy),
+  write('isEnemy'), nl,
   isSoldier(Enemy),
   checkTestudo(Board, Piece, Xf, Yf, Step, Direction, NumberFriends).
 
@@ -195,7 +199,6 @@ checkTestudoLine(Board, Piece, X, Y, Step, Direction, NumberFriends) :-
   stepDirection(X, Y, StepX, StepY, Step, Direction),
   FriendsLeft is NumberFriends - 1,
   checkTestudoLine(Board, Piece, StepX, StepY, Step, Direction, FriendsLeft).
-
 
 isNextFriend(Board, Piece, X, Y, NextX, NextY, Step, Direction, Result) :-
   stepDirection(X, Y, NextX, NextY, Step, Direction),
@@ -270,16 +273,16 @@ captureFlank(Board, Xi, Yi, Xf, Yf, NewBoard) :-
 captureFlank(Board, _, _, _, _, NewBoard) :-
   NewBoard = Board.
 
-/*capturePhalanx(Board, Xi, Yi, Xf, Yf, NewBoard) :-
+capturePhalanx(Board, Xi, Yi, Xf, Yf, NewBoard) :-
   isPhalanx(Board, Xi, Yi, Xf, Yf, EnemyX, EnemyY),
   capturePiece(Board, EnemyX, EnemyY, NewBoard).
 capturePhalanx(Board, _, _, _, _, NewBoard) :-
-  NewBoard = Board.*/
+  NewBoard = Board.
 
 captureXII(Board, Xi, Yi, Xf, Yf, CaptureBoard) :-
   capturePushAndCrush(Board, Xi, Yi, Xf, Yf, Board2),
-  captureFlank(Board2, Xi, Yi, Xf, Yf, CaptureBoard).
-  %capturePhalanx(Board3, Xi, Yi, Xf, Yf, CaptureBoard).
+  captureFlank(Board2, Xi, Yi, Xf, Yf, Board3),
+  capturePhalanx(Board3, Xi, Yi, Xf, Yf, CaptureBoard).
 
 captureClassic(Board, Xf, Yf, Step, Direction, FinalBoard) :-
   stepDirection(Xf, Yf, StepX, StepY, Step, Direction),
