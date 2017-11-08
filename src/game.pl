@@ -1,6 +1,6 @@
 :- include('moves.pl').
-:- include('board_draw.pl').
-:- include('board_state.pl').
+:- include('display.pl').
+:- include('board.pl').
 
 printMenu :-
   clearScreen,

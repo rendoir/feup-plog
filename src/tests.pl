@@ -3,8 +3,8 @@
 % [------Includes------]
 % [--------------------]
 
-:- include('board_state.pl').
-:- include('board_draw.pl').
+:- include('board.pl').
+:- include('display.pl').
 :- include('moves.pl').
 
 % [--------------------]

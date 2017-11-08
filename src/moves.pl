@@ -1,5 +1,5 @@
-:-include('capture.pl').
-:-include('utils.pl').
+:-include('captures.pl').
+:-include('utilities.pl').
 
 /**
   Checks if there is an element between (Xi, Yi) and (Xf, Yf).
