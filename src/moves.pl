@@ -1,9 +1,18 @@
+/**
+  moves.pl
+
+  This file is responsible for validating a move and executing it.
+**/
+
+
 :-include('captures.pl').
 :-include('utilities.pl').
 :-include('board.pl').
 
+
 /**
-  Checks if there is an element between (Xi, Yi) and (Xf, Yf).
+  isElementBetween/5: True if there are no elements between two coordinates.
+    Board, Xi, Yi, Xf, Yf.
 **/
 isElementBetween(_, X, Y, X, Y).
 isElementBetween(Board, Xi, Yi, Xf, Yf) :-
@@ -21,14 +30,17 @@ isElementBetween(Board, Xi, Yi, Xf, Yf) :-
 
 
 /**
-  Checks if the move is orthogonal.
+  isOrthogonal/4: True if the move is orthogonal.
+    Xi, Yi, Xf, Yf.
  **/
 isOrthogonal(Xi, Yi, Xf, Yf) :-
   Xi = Xf ; Yi = Yf.
 
 
 /**
-  Checks if a move will immobilize its own dux
+  friendDuxImmobilized/5: True if a move would immobilize its own dux.
+    Board, Xi, Yi, Xf, Yf.
+	A dux is immobilized if all of his directions are blocked.
 **/
 friendDuxImmobilized(Board, Xi, Yi, Xf, Yf) :- friendDuxImmobilized(Board, Xi, Yi, Xf, Yf, next, horizontal).
 friendDuxImmobilized(Board, Xi, Yi, Xf, Yf) :- friendDuxImmobilized(Board, Xi, Yi, Xf, Yf, before, horizontal).
@@ -49,7 +61,8 @@ friendDuxImmobilized(Board, Xi, Yi, Xf, Yf, Step, Direction) :-
 
 
 /**
-  Checks if there is an enemy dux around (X, Y)
+  isEnemyDuxAround/3: True if there is an enemy dux around a coordinate.
+    Board, X, Y.
 **/
 isEnemyDuxAround(Board, X, Y) :- isEnemyDuxAround(Board, X, Y, next, horizontal).
 isEnemyDuxAround(Board, X, Y) :- isEnemyDuxAround(Board, X, Y, before, horizontal).
@@ -64,7 +77,9 @@ isEnemyDuxAround(Board, X, Y, Step, Direction) :-
 
 
 /**
-  Check if move is offensive
+  moveIsOffensive/5: True if a move is offensive.
+    Board, Xi, Yi, Xf, Yf.
+	A move is considered offensive if it is a hit to the enemy dux or a capture.
 **/
 moveIsOffensive(Board, Xi, Yi, Xf, Yf) :-
   simulateMove(Board, Xi, Yi, Xf, Yf, SimulationBoard),
@@ -77,14 +92,17 @@ moveIsOffensive(Board, Xi, Yi, Xf, Yf) :-
 
 
 /**
-  Check if move is defensive
+  moveIsDefensive/5: True if a move is defensive.
+    Board, Xi, Yi, Xf, Yf.
+	A move is defensive if it is not offensive.
 **/
 moveIsDefensive(Board, Xi, Yi, Xf, Yf) :-
   not(moveIsOffensive(Board, Xi, Yi, Xf, Yf)).
 
 
 /**
-  Check if a piece just moves one square
+  moveIsOneSquare/4: True if a piece just moves one square in a move.
+    Xi, Yi, Xf, Yf.
 **/
 moveIsOneSquare(Xi, _, Xf, _) :-
   DeltaX is Xi - Xf,
@@ -96,7 +114,8 @@ moveIsOneSquare(_, Yi, _, Yf) :-
   AbsoluteDeltaY =:= 1.
 
 /**
-  Simulates a move without checking if it is a possible move
+  simulateMove/6: Simulates a move without checking if it is a valid move.
+    Board, Xi, Yi, Xf, Yf, ModifiedBoard.
 **/
 simulateMove(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   getMatrixElement(Yi, Xi, Board, FromCell),
@@ -105,8 +124,11 @@ simulateMove(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
 
 
 /**
-  Check if a soldier can move given that he could be locked
-  Even if he is locked, there are situations where he can still move
+  checkLockedSoldier/5: True if a soldier is not locked or he is but can move.
+    Board, Xi, Yi, Xf, Yf.
+	Valid situations: He is not a soldier; the move is offensive; all the enemies around him have two or more enemies around him.
+  checkLockedSoldier/7: Check the last valid situation in all directions and steps.
+    Board, Xi, Yi, Xf, Yf, Step, Direction.
 **/
 checkLockedSoldier(Board, Xi, Yi, _, _) :- not(isSoldier(Board, Xi, Yi)).
 checkLockedSoldier(Board, Xi, Yi, Xf, Yf) :- moveIsOffensive(Board, Xi, Yi, Xf, Yf).
@@ -115,6 +137,7 @@ checkLockedSoldier(Board, Xi, Yi, _, _) :-
   not(checkLockedSoldier(Board, Xi, Yi, _, _, before, horizontal)),
   not(checkLockedSoldier(Board, Xi, Yi, _, _, next, vertical)),
   not(checkLockedSoldier(Board, Xi, Yi, _, _, before, vertical)).
+
 checkLockedSoldier(Board, X, Y, _, _, Step, Direction) :-
   getMatrixElement(Y, X, Board, Piece),
   stepDirection(X, Y, StepX, StepY, Step, Direction),
@@ -123,8 +146,12 @@ checkLockedSoldier(Board, X, Y, _, _, Step, Direction) :-
   getEnemiesAround(Board, StepX, StepY, Counter),
   Counter < 2.
 
+
 /**
-  Check if the mobility rules of the dux allow him to move
+  checkDuxMobility/5: True if the mobility rules of the dux allow him to move.
+    Board, Xi, Yi, Xf, Yf.
+  checkDuxMobility/6: True if the blocked paths allow the dux to move taking into account his position.
+    Board, Xi, Yi, Xf, Yf, BlockedPaths.
 **/
 checkDuxMobility(Board, Xi, Yi, _, _) :- not(isDux(Board, Xi, Yi)).
 checkDuxMobility(Board, Xi, Yi, Xf, Yf) :-
@@ -132,14 +159,12 @@ checkDuxMobility(Board, Xi, Yi, Xf, Yf) :-
   checkDuxMobility(Board, Xi, Yi, Xf, Yf, BlockedPaths).
 
 checkDuxMobility(_, _, _, _, _, 0).
-
 checkDuxMobility(_, Xi, Yi, Xf, Yf, 1) :-
   not(isInCorner(Xi, Yi)),
   moveIsOneSquare(Xi, Yi, Xf, Yf).
 checkDuxMobility(Board, Xi, Yi, Xf, Yf, 1) :-
   not(isInCorner(Xi, Yi)),
   moveIsOffensive(Board, Xi, Yi, Xf, Yf).
-
 checkDuxMobility(Board, Xi, Yi, Xf, Yf, 2) :-
   not(isInCorner(Xi, Yi)),
   not(isInBorder(Xi, Yi)),
@@ -147,7 +172,8 @@ checkDuxMobility(Board, Xi, Yi, Xf, Yf, 2) :-
 
 
 /**
-  Moves a piece from (Xi, Yi) to (Xf, Yf). This substitutes (Xf, Yf) with the cell atom from (Xi, Yi) and sets (Xi, Yi) with the empty cell atom.
+  move/6: True if a move is valid. Checks for captures and applies a move.
+    Board, Xi, Yi, Xf, Yf, ModifiedBoard. 
  **/
 move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   isInsideBoard(Xi, Yi),
@@ -173,6 +199,10 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   captureClassic(MovedBoard2, Xf, Yf, FinalBoard).
 
 
+/**
+  move/7: True if a move is valid. Checks for captures and applies a move. Also checks if the piece belongs to the player.
+    Player, Board, Xi, Yi, Xf, Yf, ModifiedBoard. 
+ **/
 move(Player, Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   getMatrixElement(Yi, Xi, Board, Piece),
   isPlayer(Player, Piece),
