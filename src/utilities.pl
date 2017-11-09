@@ -1,3 +1,10 @@
+/**
+  utilities.pl
+  
+  This file is responsible for all the tools a normal board game program would need.
+**/
+
+
 :- use_module(library(random)).
 
 /**

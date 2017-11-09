@@ -1,3 +1,10 @@
+/**
+  tests.pl
+
+  This file is responsible for unit testing some key features of the program.
+**/
+
+
 :- include('display.pl').
 :- include('moves.pl').
 
