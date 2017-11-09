@@ -2,16 +2,48 @@
 
 moveComputer(Board, Player, NewBoard, Difficulty) :-
   getAllMoves(Board, Player, MoveList),
-  pickMove(Difficulty, MoveList, Move),
+  pickMove(Difficulty, Board, MoveList, Move),
   applyComputerMove(Board, Move, NewBoard).
 
-
-pickMove(1, MoveList, Move) :-
+/**
+  pickMove/3:
+  Difficulty - Level of difficulty (1 -> dumb, 2 -> intelligent).
+  MoveList - The list of possible moves. Each move is a list of 4 elements [Xi, Yi, Xf, Yf].
+  Move - The picked move.
+**/
+pickMove(1, _, MoveList, Move) :-
   length(MoveList, ListLength),
   random(0, ListLength, RandomIndex),
   getListElement(RandomIndex, MoveList, Move).
-/* TODO */
-%pickMove(2, MoveList, Move).
+pickMove(2, Board, MoveList, Move) :-
+  findGameOverMove(Board, MoveList, Move).
+pickMove(2, Board, MoveList, Move) :-
+  findOffensiveMove(Board, MoveList, Move).
+pickMove(2, _, MoveList, Move) :-
+  pickMove(1, _, MoveList, Move).
+
+
+findGameOverMove(Board, [HeadMove|_], Move) :- testGameOverMove(Board, HeadMove, Move).
+findGameOverMove(Board, [_|RestMoves], Move) :- findGameOverMove(Board, RestMoves, Move).
+testGameOverMove(Board, TestMove, Move) :-
+  getListElement(0, TestMove, Xi),
+  getListElement(1, TestMove, Yi),
+  getListElement(2, TestMove, Xf),
+  getListElement(3, TestMove, Yf),
+  move(Board, Xi, Yi, Xf, Yf, NewBoard),
+  gameIsOver(NewBoard),
+  Move = TestMove.
+
+
+findOffensiveMove(Board, [HeadMove|_], Move) :- testOffensiveMove(Board, HeadMove, Move).
+findOffensiveMove(Board, [_|RestMoves], Move) :- findOffensiveMove(Board, RestMoves, Move).
+testOffensiveMove(Board, TestMove, Move) :-
+  getListElement(0, TestMove, Xi),
+  getListElement(1, TestMove, Yi),
+  getListElement(2, TestMove, Xf),
+  getListElement(3, TestMove, Yf),
+  moveIsOffensive(Board, Xi, Yi, Xf, Yf),
+  Move = TestMove.
 
 
 applyComputerMove(Board, Move, NewBoard) :-
@@ -24,7 +56,6 @@ applyComputerMove(Board, Move, NewBoard) :-
   move(Board, Xi, Yi, Xf, Yf, NewBoard).
 
 
-/* TODO */
 getAllMoves(Board, Player, MoveList) :-
   runThroughBoard(Board, Player, _, MoveList, -1).
 

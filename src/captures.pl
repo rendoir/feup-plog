@@ -310,3 +310,8 @@ gameIsOver(Board, Winner) :-
   not(findMatrixElement(Board, white_soldier)),
   Winner = 'Black',
   write('Winner: '), write(Winner), nl.
+
+gameIsOver(Board) :- not(findMatrixElement(Board, black_dux)).
+gameIsOver(Board) :- not(findMatrixElement(Board, white_dux)).
+gameIsOver(Board) :- not(findMatrixElement(Board, black_soldier)).
+gameIsOver(Board) :- not(findMatrixElement(Board, white_soldier)).
