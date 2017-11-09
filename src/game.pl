@@ -119,11 +119,11 @@ gameLoopPlayerVsComputer(_, _).
        Computer vs Computer
 *******************************/
 
-playComputerVsComputer :-
+playComputerVsComputer(Difficulty) :-
   clearScreen,
   initialBoard(Board),
   drawBoard(Board),
-  gameLoopComputerVsComputer(Board).
+  gameLoopComputerVsComputer(Board, Difficulty).
   
 gameLoopComputerVsComputer(Board, Difficulty) :-
   playComputer(Board, 1, Board2, Difficulty),

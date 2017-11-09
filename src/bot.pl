@@ -2,12 +2,16 @@
 
 moveComputer(Board, Player, Diffulty, NewBoard) :- 
   getAllMoves(Board, Player, MoveList),
+  write('GOT ALL MOVES'), nl,
   pickMove(Diffulty, MoveList, Move),
-  applyComputerMove(Board, Move, NewBoard).
+  write('PICKED A MOVE'), nl,
+  applyComputerMove(Board, Move, NewBoard),
+  write('APPLIED MOVE'), nl.
 
 
 pickMove(1, MoveList, Move) :-
   length(MoveList, ListLength),
+  write('LIST LENGTH='), write(ListLength), nl,
   random(0, ListLength, RandomIndex),
   getListElement(RandomIndex, MoveList, Move).
 /* TODO */
@@ -24,9 +28,12 @@ applyComputerMove(Board, Move, NewBoard) :-
 
 /* TODO */
 getAllMoves(Board, Player, MoveList) :-
-  runThroughBoard(Board, Player, MoveList, 0).
+  runThroughBoard(Board, Player, MoveList, -1).
 
 runThroughBoard(_, _, _, 8).
+runThroughBoard(Board, Player, MoveList, -1) :-
+  MoveList = [],
+  runThroughBoard(Board, Player, MoveList, 0).
 runThroughBoard(Board, Player, MoveList, Row) :-
   Row < 8,
   runThroughRow(Board, Player, MoveList, Row, 0),
@@ -34,9 +41,6 @@ runThroughBoard(Board, Player, MoveList, Row) :-
   runThroughBoard(Board, Player, MoveList, NextRow).
 
 runThroughRow(_, _, _, _, 8).
-runThroughRow(Board, Player, MoveList, 0, 0) :-
-  MoveList = [],
-  runThroughRow(Board, Player, MoveList, 0, 0).
 runThroughRow(Board, Player, MoveList, Row, Column) :-
   Column < 8,
   getPieceMoveList(Board, Player, Row, Column, PieceMoves),
