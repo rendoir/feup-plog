@@ -1,9 +1,9 @@
 :-include('moves.pl').
 
-moveComputer(Board, Player, Diffulty, NewBoard) :-
+moveComputer(Board, Player, NewBoard, Difficulty) :-
   getAllMoves(Board, Player, MoveList),
   write('GOT ALL MOVES'), nl,
-  pickMove(Diffulty, MoveList, Move),
+  pickMove(Difficulty, MoveList, Move),
   write('PICKED A MOVE'), nl,
   applyComputerMove(Board, Move, NewBoard),
   write('APPLIED MOVE'), nl.
@@ -19,32 +19,36 @@ pickMove(1, MoveList, Move) :-
 
 
 applyComputerMove(Board, Move, NewBoard) :-
+  write('APPLYING MOVE ||| LENGTH MOVE:'), length(Move, L), write(L), nl,
   getListElement(0, Move, Xi),
   getListElement(1, Move, Yi),
   getListElement(2, Move, Xf),
   getListElement(3, Move, Yf),
+  format('MOVING ~d ~d ~d ~d', [Xi, Yi, Xf, Yf]), nl,
   move(Board, Xi, Yi, Xf, Yf, NewBoard).
 
 
 /* TODO */
 getAllMoves(Board, Player, MoveList) :-
-  runThroughBoard(Board, Player, MoveList, -1).
+  runThroughBoard(Board, Player, _, MoveList, -1).
 
-runThroughBoard(_, _, _, Row) :- Row >= 8.
-runThroughBoard(Board, Player, MoveList, -1) :-
+runThroughBoard(_, _, MoveList, FinalMoveList, Row) :- Row >= 8, FinalMoveList = MoveList.
+runThroughBoard(Board, Player, MoveList, FinalMoveList, -1) :-
   MoveList = [],
-  runThroughBoard(Board, Player, MoveList, 0).
-runThroughBoard(Board, Player, MoveList, Row) :-
-  runThroughRow(Board, Player, MoveList, Row, 0),
+  runThroughBoard(Board, Player, MoveList, FinalMoveList, 0).
+runThroughBoard(Board, Player, MoveList, FinalMoveList, Row) :-
+  runThroughRow(Board, Player, MoveList, FinalMoveListRow, Row, 0),
+  length(MoveList, L), write('----- L RUN_THROUGH_BOARD= '), write(L), nl,
   NextRow is Row + 1,
-  runThroughBoard(Board, Player, MoveList, NextRow).
+  runThroughBoard(Board, Player, FinalMoveListRow, FinalMoveList, NextRow).
 
-runThroughRow(_, _, _, _, Column) :- Column >= 8.
-runThroughRow(Board, Player, MoveList, Row, Column) :-
+runThroughRow(_, _, MoveList, FinalMoveListRow, _, Column) :- Column >= 8, FinalMoveListRow = MoveList.
+runThroughRow(Board, Player, MoveList, FinalMoveListRow, Row, Column) :-
   getPieceMoveList(Board, Player, Row, Column, PieceMoves),
   append(MoveList, PieceMoves, NewMoveList),
+  length(PieceMoves, L), write('----- L RUN_TROUGH_ROW= '), write(L), nl,
   NextColumn is Column + 1,
-  runThroughRow(Board, Player, NewMoveList, Row, NextColumn).
+  runThroughRow(Board, Player, NewMoveList, FinalMoveListRow, Row, NextColumn).
 
 getPieceMoveList(Board, Player, Row, Column, PieceMoves) :-
   getPieceMoveList(Board, Player, Row, Column, next, horizontal, PieceMoves1),
@@ -53,14 +57,18 @@ getPieceMoveList(Board, Player, Row, Column, PieceMoves) :-
   getPieceMoveList(Board, Player, Row, Column, before, vertical, PieceMoves4),
   append(PieceMoves1, PieceMoves2, PieceMovesTmp),
   append(PieceMovesTmp, PieceMoves3, PieceMovesTmp2),
-  append(PieceMovesTmp2, PieceMoves4, PieceMoves).
+  append(PieceMovesTmp2, PieceMoves4, PieceMoves),
+  length(PieceMoves, L), write('----- L GET_PIECE_MOVE_LIST= '), write(L), nl.
 
 getPieceMoveList(Board, Player, Y, X, Step, Direction, PieceMoves) :-
    getPieceMoveList(Board, Player, Y, X, _, _, Step, Direction, _, PieceMoves, 1, -1).
 /**
-  -1 -> First iteration
-  0  -> Last iteration failed
-  1  -> Last iteration succeeded
+  getPieceMoveList/12:
+   Board, Player, Row, Column, LastCheckedX, LastCheckedY, Step, Direction,
+   MoveList - temporary (unified to [] in the first iteration),
+   FinalMoveList - final (not unified until stop condition),
+   NumberSteps - squares visited in the current step and direction,
+   Result - result of the last move checked (-1 -> first iteration, 0 -> last move failed, 1 -> last move succeeded).
 **/
 getPieceMoveList(_, _, _, _, _, _, _, _, TmpMoves, FinalMoves, NumberSteps, _) :- NumberSteps >= 8, FinalMoves = TmpMoves.
 getPieceMoveList(Board, Player, Y, X, StepX, StepY, Step, Direction, PieceMoves, FinalMoves, NumberSteps, 0) :-
