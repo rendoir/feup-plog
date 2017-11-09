@@ -1,14 +1,6 @@
-
-% [--------------------]
-% [------Includes------]
-% [--------------------]
-
 :- include('display.pl').
 :- include('moves.pl').
 
-% [--------------------]
-% [-------TESTS--------]
-% [--------------------]
 
 test_board([
 	[white_dux, black_soldier, white_soldier, black_soldier, black_soldier, black_soldier, black_soldier, black_soldier],
