@@ -1,15 +1,31 @@
+/**
+  bot.pl
+
+  This file is responsible for allowing a bot to pick a move from all the possible moves and apply it.
+**/
+
+
 :-include('moves.pl').
 
+
+/**
+  moveComputer/4: Gets all the possible moves, selects one based on bot difficulty and applies it.
+    Board, PlayerNumber, ModifiedBoard, BotDifficulty.
+**/
 moveComputer(Board, Player, NewBoard, Difficulty) :-
   getAllMoves(Board, Player, MoveList),
   pickMove(Difficulty, Board, MoveList, Move),
   applyComputerMove(Board, Move, NewBoard).
 
+
 /**
-  pickMove/3:
-  Difficulty - Level of difficulty (1 -> dumb, 2 -> intelligent).
-  MoveList - The list of possible moves. Each move is a list of 4 elements [Xi, Yi, Xf, Yf].
-  Move - The picked move.
+  pickMove/4: Picks a move from the list of all the possible moves.
+    BotDifficulty, Board, PossibleMoves, SelectedMove.
+    BotDifficulty - Level of difficulty (1 -> dumb, 2 -> intelligent).
+	PossibleMoves - The list of possible moves. Each move is a list of 4 elements [Xi, Yi, Xf, Yf].
+
+	The 'dumb' bot selects a random piece from the list of possible moves.
+	The 'intelligent' bot tries to make a move that ends the game. If it fails to do so, he tries to find an offensive mode. Lastly, if that also fails, it plays a random move.
 **/
 pickMove(1, _, MoveList, Move) :-
   length(MoveList, ListLength),
@@ -23,6 +39,10 @@ pickMove(2, _, MoveList, Move) :-
   pickMove(1, _, MoveList, Move).
 
 
+/**
+  findGameOverMove/3: True if it finds a move that can end the game in the list of possible moves.
+    Board, PossibleMoves, SelectedMove.
+**/
 findGameOverMove(Board, [HeadMove|_], Move) :- testGameOverMove(Board, HeadMove, Move).
 findGameOverMove(Board, [_|RestMoves], Move) :- findGameOverMove(Board, RestMoves, Move).
 testGameOverMove(Board, TestMove, Move) :-
@@ -35,6 +55,10 @@ testGameOverMove(Board, TestMove, Move) :-
   Move = TestMove.
 
 
+/**
+  findOffensiveMove/3: True if it finds an offensive move in the list of possible moves.
+    Board, PossibleMoves, SelectedMove.
+**/
 findOffensiveMove(Board, [HeadMove|_], Move) :- testOffensiveMove(Board, HeadMove, Move).
 findOffensiveMove(Board, [_|RestMoves], Move) :- findOffensiveMove(Board, RestMoves, Move).
 testOffensiveMove(Board, TestMove, Move) :-
@@ -46,6 +70,10 @@ testOffensiveMove(Board, TestMove, Move) :-
   Move = TestMove.
 
 
+/**
+  applyComputerMove/3: Applies a move to the board.
+    Board, Move, ModifiedBoard.
+**/
 applyComputerMove(Board, Move, NewBoard) :-
   getListElement(0, Move, Xi),
   getListElement(1, Move, Yi),
@@ -56,9 +84,19 @@ applyComputerMove(Board, Move, NewBoard) :-
   move(Board, Xi, Yi, Xf, Yf, NewBoard).
 
 
+/**
+  getAllMoves/3: Gets all the possible moves into a list.
+    Board, PlayerNumber, PossibleMoveList.
+**/
 getAllMoves(Board, Player, MoveList) :-
   runThroughBoard(Board, Player, _, MoveList, -1).
 
+
+/**
+  runThroughBoard/5: Processes all the rows of the board.
+    Board, PlayerNumber, TemporaryMoveList, PossibleMoveList, Row.
+	Row - Index of the row or -1 if it is the first iteration (responsible for initializing the list).
+**/
 runThroughBoard(_, _, MoveList, FinalMoveList, Row) :- Row >= 8, FinalMoveList = MoveList.
 runThroughBoard(Board, Player, MoveList, FinalMoveList, -1) :-
   MoveList = [],
@@ -68,6 +106,13 @@ runThroughBoard(Board, Player, MoveList, FinalMoveList, Row) :-
   NextRow is Row + 1,
   runThroughBoard(Board, Player, FinalMoveListRow, FinalMoveList, NextRow).
 
+
+/**
+  runThroughRow/6: Processes a row, processing all the pieces.
+    Board, PlayerNumber, TemporaryMoveList, PossibleMoveList, Row, Column.
+	TemporaryMoveList - Unified to [] by runThroughBoard/5.
+	PossibleMoveList - Final list (not unified until stop condition).
+**/
 runThroughRow(_, _, MoveList, FinalMoveListRow, _, Column) :- Column >= 8, FinalMoveListRow = MoveList.
 runThroughRow(Board, Player, MoveList, FinalMoveListRow, Row, Column) :-
   getPieceMoveList(Board, Player, Row, Column, PieceMoves),
@@ -75,6 +120,27 @@ runThroughRow(Board, Player, MoveList, FinalMoveListRow, Row, Column) :-
   NextColumn is Column + 1,
   runThroughRow(Board, Player, NewMoveList, FinalMoveListRow, Row, NextColumn).
 
+
+/**
+  getPieceMoveList/5: Processes a piece, trying to move each in all directions and steps and, when possible, appending them to the list.
+    Board, PlayerNumber, Row, Column, PossiblePieceMoves.
+	
+  getPieceMoveList/7: Checks all the moves possible in the specified direction and step.
+	Board, PlayerNumber, Row, Column, Step, Direction, PossiblePieceMoves.
+
+  getPieceMoveList/12:
+    Board, PlayerNumber, Row, Column, LastCheckedX, LastCheckedY, Step, Direction, TemporaryMoveList, PossiblePieceMoves, NextNumberSteps, Result.
+    LastCheckedX, LastCheckedY - Last checked coordinates to move to.
+	TemporaryMoveList - Unified to [] in the first iteration (When it is called with Result unified to -1),
+    PossiblePieceMoves - Final list (not unified until stop condition),
+    NextNumberSteps - Number of squares visited in the current step and direction,
+    Result - Result of the last move checked (-1 -> first iteration, 0 -> last move failed, 1 -> last move succeeded).
+
+	The result works as a way of the predicate not failing, making it always true. However it works differently based on it.
+	  Result = 0 means the last move was invalid and therefore should not be added to the list.
+	  Result = 1 means the last move was valid and therefore should be added to the list.
+	  Result = -1 means it is the first iteration, useful to initialize the TemporaryMoveList.	
+**/
 getPieceMoveList(Board, Player, Row, Column, PieceMoves) :-
   getPieceMoveList(Board, Player, Row, Column, next, horizontal, PieceMoves1),
   getPieceMoveList(Board, Player, Row, Column, before, horizontal, PieceMoves2),
@@ -86,14 +152,7 @@ getPieceMoveList(Board, Player, Row, Column, PieceMoves) :-
 
 getPieceMoveList(Board, Player, Y, X, Step, Direction, PieceMoves) :-
    getPieceMoveList(Board, Player, Y, X, _, _, Step, Direction, _, PieceMoves, 1, -1).
-/**
-  getPieceMoveList/12:
-   Board, Player, Row, Column, LastCheckedX, LastCheckedY, Step, Direction,
-   MoveList - temporary (unified to [] in the first iteration),
-   FinalMoveList - final (not unified until stop condition),
-   NumberSteps - squares visited in the current step and direction,
-   Result - result of the last move checked (-1 -> first iteration, 0 -> last move failed, 1 -> last move succeeded).
-**/
+
 getPieceMoveList(_, _, _, _, _, _, _, _, TmpMoves, FinalMoves, NumberSteps, _) :- NumberSteps >= 8, FinalMoves = TmpMoves.
 getPieceMoveList(Board, Player, Y, X, StepX, StepY, Step, Direction, PieceMoves, FinalMoves, NumberSteps, 0) :-
   stepDirection(StepX, StepY, CheckX, CheckY, Step, Direction),

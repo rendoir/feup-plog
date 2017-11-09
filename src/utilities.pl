@@ -202,7 +202,7 @@ readOption(Option, Minimum, Maximum) :-
 /**
   readCoordinates/2: Reads a coordinate from the input buffer while checking for out of bounds.
     X, Y.
-	To select a coordinate you must enter X followed by a space then Y and finally press enter.
+	To select each component of a coordinate you must enter it followed by a dot and finally press enter.
 **/
 readCoordinates(X, Y) :-
 	read(X),
