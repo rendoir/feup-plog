@@ -68,3 +68,37 @@ drawCell(empty_cell)    :- write('     |').
   clearScreen/0: Sends an ANSI code to clear the console.
 **/
 clearScreen :-  write('\33\[2J').
+
+
+/**
+  printMenu/0: Prints the main menu.
+**/
+printMenu :-
+  clearScreen,
+  write('--------------------------------'), nl,
+  write('-        Latrunculi XII        -'), nl,
+  write('--------------------------------'), nl,
+  write('-                              -'), nl,
+  write('-   1. Player vs Player        -'), nl,
+  write('-   2. Player vs Computer      -'), nl,
+  write('-   3. Computer vs Computer    -'), nl,
+  write('-   4. Exit                    -'), nl,
+  write('-                              -'), nl,
+  write('--------------------------------'), nl,
+  write('Choose a game mode:'), nl.
+
+
+/**
+  printDifficultyMenu/0: Prints the difficulty menu.
+**/
+printDifficultyMenu :-
+  clearScreen,
+  write('--------------------------------'), nl,
+  write('-        Latrunculi XII        -'), nl,
+  write('--------------------------------'), nl,
+  write('-                              -'), nl,
+  write('-   1. Dumb Bot                -'), nl,
+  write('-   2. Intelligent Bot         -'), nl,
+  write('-                              -'), nl,
+  write('--------------------------------'), nl,
+  write('Choose a bot difficulty:'), nl.
