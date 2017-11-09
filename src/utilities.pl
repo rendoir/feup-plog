@@ -105,7 +105,7 @@ abs(Number, Absolute) :-
   Absolute is Number * (-1).
 
 readOption(Number, Minimum, Maximum) :-
-	read(Number),
+	read(Number), get_char(_),
 	integer(Number),
 	Number >= Minimum,
 	Number =< Maximum.

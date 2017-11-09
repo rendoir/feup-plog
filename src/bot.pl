@@ -2,16 +2,12 @@
 
 moveComputer(Board, Player, NewBoard, Difficulty) :-
   getAllMoves(Board, Player, MoveList),
-  write('GOT ALL MOVES'), nl,
   pickMove(Difficulty, MoveList, Move),
-  write('PICKED A MOVE'), nl,
-  applyComputerMove(Board, Move, NewBoard),
-  write('APPLIED MOVE'), nl.
+  applyComputerMove(Board, Move, NewBoard).
 
 
 pickMove(1, MoveList, Move) :-
   length(MoveList, ListLength),
-  write('LIST LENGTH='), write(ListLength), nl,
   random(0, ListLength, RandomIndex),
   getListElement(RandomIndex, MoveList, Move).
 /* TODO */
@@ -19,12 +15,12 @@ pickMove(1, MoveList, Move) :-
 
 
 applyComputerMove(Board, Move, NewBoard) :-
-  write('APPLYING MOVE ||| LENGTH MOVE:'), length(Move, L), write(L), nl,
   getListElement(0, Move, Xi),
   getListElement(1, Move, Yi),
   getListElement(2, Move, Xf),
   getListElement(3, Move, Yf),
-  format('MOVING ~d ~d ~d ~d', [Xi, Yi, Xf, Yf]), nl,
+  format('  Moving from (~d,~d) to (~d,~d)', [Xi, Yi, Xf, Yf]), nl,
+  pressEnterToContinue,
   move(Board, Xi, Yi, Xf, Yf, NewBoard).
 
 
@@ -38,7 +34,6 @@ runThroughBoard(Board, Player, MoveList, FinalMoveList, -1) :-
   runThroughBoard(Board, Player, MoveList, FinalMoveList, 0).
 runThroughBoard(Board, Player, MoveList, FinalMoveList, Row) :-
   runThroughRow(Board, Player, MoveList, FinalMoveListRow, Row, 0),
-  length(MoveList, L), write('----- L RUN_THROUGH_BOARD= '), write(L), nl,
   NextRow is Row + 1,
   runThroughBoard(Board, Player, FinalMoveListRow, FinalMoveList, NextRow).
 
@@ -46,7 +41,6 @@ runThroughRow(_, _, MoveList, FinalMoveListRow, _, Column) :- Column >= 8, Final
 runThroughRow(Board, Player, MoveList, FinalMoveListRow, Row, Column) :-
   getPieceMoveList(Board, Player, Row, Column, PieceMoves),
   append(MoveList, PieceMoves, NewMoveList),
-  length(PieceMoves, L), write('----- L RUN_TROUGH_ROW= '), write(L), nl,
   NextColumn is Column + 1,
   runThroughRow(Board, Player, NewMoveList, FinalMoveListRow, Row, NextColumn).
 
@@ -57,8 +51,7 @@ getPieceMoveList(Board, Player, Row, Column, PieceMoves) :-
   getPieceMoveList(Board, Player, Row, Column, before, vertical, PieceMoves4),
   append(PieceMoves1, PieceMoves2, PieceMovesTmp),
   append(PieceMovesTmp, PieceMoves3, PieceMovesTmp2),
-  append(PieceMovesTmp2, PieceMoves4, PieceMoves),
-  length(PieceMoves, L), write('----- L GET_PIECE_MOVE_LIST= '), write(L), nl.
+  append(PieceMovesTmp2, PieceMoves4, PieceMoves).
 
 getPieceMoveList(Board, Player, Y, X, Step, Direction, PieceMoves) :-
    getPieceMoveList(Board, Player, Y, X, _, _, Step, Direction, _, PieceMoves, 1, -1).

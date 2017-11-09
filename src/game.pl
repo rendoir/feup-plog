@@ -54,7 +54,7 @@ isPieceOfPlayer(Board, Player, X, Y) :-
 
 playPlayer(Board, Player, NewBoard) :-
   repeat,
-  write('Player '), write(Player), nl,
+  format('Player ~d', [Player]), nl,
   write('  Enter source coordinates:'), nl,
   readCoordinates(Xi, Yi),
   isPieceOfPlayer(Board, Player, Xi, Yi),
@@ -64,8 +64,9 @@ playPlayer(Board, Player, NewBoard) :-
   !.
 
 playComputer(Board, Player, NewBoard, Difficulty) :-
-  write('Computer '), write(Player), nl,
+  format('Computer ~d', [Player]), nl,
   pressEnterToContinue,
+  write('  Generating moves...'), nl,
   moveComputer(Board, Player, NewBoard, Difficulty).
 
 
