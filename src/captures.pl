@@ -77,7 +77,7 @@ getBlockedPaths(Board, X, Y, Counter) :-
   getEnemiesAround(Board, X, Y, CounterE),
   CounterE > 0,
   getFriendsAround(Board, X, Y, CounterF),
-  Counter is CounterE + CounterF.
+  Counter is CounterE + CounterF, !.
 getBlockedPaths(_, _, _, Counter) :- Counter is 0.
 
 /**

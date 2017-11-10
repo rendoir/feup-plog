@@ -27,7 +27,9 @@ main :-
 **/
 difficultyMenu(Difficulty) :-
   printDifficultyMenu,
-  readOption(Difficulty, 1, 2).
+  repeat,
+  readOption(Difficulty, 1, 2),
+  !.
 
 
 /**
@@ -36,7 +38,9 @@ difficultyMenu(Difficulty) :-
 **/
 mainMenu(Option) :-
   printMenu,
-  readOption(Option, 1, 4).
+  repeat,
+  readOption(Option, 1, 4),
+  !.
 
 
 /**

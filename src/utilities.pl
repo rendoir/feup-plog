@@ -196,7 +196,10 @@ readOption(Option, Minimum, Maximum) :-
 	read(Option), get_char(_),
 	integer(Option),
 	Option >= Minimum,
-	Option =< Maximum.
+	Option =< Maximum, !.
+readOption(_, _, _) :-
+  write('Invalid Option!'), nl,
+  fail.
 
 
 /**
@@ -209,7 +212,10 @@ readCoordinates(X, Y) :-
 	integer(X),
 	read(Y),
 	integer(Y),
-	isInsideBoard(X, Y).
+	isInsideBoard(X, Y), !.
+readCoordinates(_, _) :-
+  write('Invalid Coordinates!'), nl,
+  fail.
 
 
 /**
