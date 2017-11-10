@@ -88,7 +88,7 @@ moveIsOffensive(Board, Xi, Yi, Xf, Yf) :-
   simulateMove(Board, Xi, Yi, Xf, Yf, SimulationBoard),
   isEnemySoldierCapturedClassic(SimulationBoard, Xf, Yf).
 moveIsOffensive(Board, Xi, Yi, Xf, Yf) :-
-  isEnemySoldierCapturedXII(Board, Xi, Yi, Xf, Yf).
+  isEnemySoldierCapturedXXI(Board, Xi, Yi, Xf, Yf).
 
 
 /**
@@ -191,7 +191,7 @@ move(Board, Xi, Yi, Xf, Yf, FinalBoard) :-
   checkDuxMobility(Board, Xi, Yi, Xf, Yf),
   not(friendDuxImmobilized(Board, Xi, Yi, Xf, Yf)),
 
-  captureXII(Board, Xi, Yi, Xf, Yf, CaptureBoard),
+  captureXXI(Board, Xi, Yi, Xf, Yf, CaptureBoard),
 
   setMatrixElement(Yi, Xi, empty_cell, CaptureBoard, MovedBoard),
   setMatrixElement(Yf, Xf, FromCell, MovedBoard, MovedBoard2),

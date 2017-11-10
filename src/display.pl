@@ -76,7 +76,7 @@ clearScreen :-  write('\33\[2J').
 printMenu :-
   clearScreen,
   write('--------------------------------'), nl,
-  write('-        Latrunculi XII        -'), nl,
+  write('-        Latrunculi XXI        -'), nl,
   write('--------------------------------'), nl,
   write('-                              -'), nl,
   write('-   1. Player vs Player        -'), nl,
@@ -94,7 +94,7 @@ printMenu :-
 printDifficultyMenu :-
   clearScreen,
   write('--------------------------------'), nl,
-  write('-        Latrunculi XII        -'), nl,
+  write('-        Latrunculi XXI        -'), nl,
   write('--------------------------------'), nl,
   write('-                              -'), nl,
   write('-   1. Dumb Bot                -'), nl,
