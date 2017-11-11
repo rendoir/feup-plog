@@ -7,7 +7,6 @@
 
 :- include('display.pl').
 :- include('bot.pl').
-:- main.
 
 
 /*******************************
