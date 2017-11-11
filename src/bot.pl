@@ -14,6 +14,7 @@
 **/
 moveComputer(Board, Player, NewBoard, Difficulty) :-
   getAllMoves(Board, Player, MoveList),
+  length(MoveList, L), format('  Generated ~d moves.', [L]), nl,
   pickMove(Difficulty, Board, MoveList, Move),
   applyComputerMove(Board, Move, NewBoard).
 
@@ -79,7 +80,7 @@ applyComputerMove(Board, Move, NewBoard) :-
   getListElement(1, Move, Yi),
   getListElement(2, Move, Xf),
   getListElement(3, Move, Yf),
-  format('  Moving from (~d,~d) to (~d,~d)', [Xi, Yi, Xf, Yf]), nl,
+  format('  Moving from (~d,~d) to (~d,~d).', [Xi, Yi, Xf, Yf]), nl,
   pressEnterToContinue,
   move(Board, Xi, Yi, Xf, Yf, NewBoard).
 
