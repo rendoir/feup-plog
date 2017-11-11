@@ -187,13 +187,16 @@ abs(Number, Absolute) :-
   Absolute is Number * (-1).
 
 
+
 /**
   readOption/3: Reads a menu option from the input buffer within a range.
     Option, MinimumOption, MaximumOption.
 	To select an option you must enter it followed by a dot and finally press enter.
 **/
 readOption(Option, Minimum, Maximum) :-
-	read(Option), get_char(_),
+  !,
+	catch(read(Option), error(syntax_error(_),_), fail), 
+  get_char(_),
 	integer(Option),
 	Option >= Minimum,
 	Option =< Maximum, !.
@@ -208,10 +211,20 @@ readOption(_, _, _) :-
 	To select each component of a coordinate you must enter it followed by a dot and finally press enter.
 **/
 readCoordinates(X, Y) :-
-	read(X),
-	integer(X),
-	read(Y),
-	integer(Y),
+  repeat,
+  (
+    write('X?'),
+	  catch(read(X), error(syntax_error(_),_), fail),
+	  integer(X),
+    !
+  ),
+  repeat,
+  (
+    write('Y?'),
+    catch(read(Y), error(syntax_error(_),_), fail),
+    integer(Y),
+    !
+  ),
 	isInsideBoard(X, Y), !.
 readCoordinates(_, _) :-
   write('Invalid Coordinates!'), nl,
