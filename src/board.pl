@@ -30,7 +30,7 @@ initColumns(Board, Size, Counter) :-
 
 
 initBoard(Board, Size) :-
-  Size > 2,
+  Size > 1,
   initBoard(Board, Size, Size, []).
 initBoard(Board, Size, 0, TmpBoard) :-
   Board = TmpBoard,
