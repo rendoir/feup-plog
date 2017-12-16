@@ -1,6 +1,6 @@
 /**
   display.pl
- 
+
   This file is responsible for the Console Display of the board.
 **/
 
@@ -14,25 +14,25 @@ drawBoardRest([], _).
 drawBoardRest([Row | Rest], Size) :-
   drawUpSeparatorLine(Size),
   write('|'),
-  drawRow(Row, Size), nl,
+  drawRow(Row), nl,
   drawDownSeparatorLine(Size),
   drawBoardRest(Rest, Size).
 
 
-drawRow([], _).
-drawRow([Cell | Remainder], Size) :-
+drawRow([]).
+drawRow([Cell | Remainder]) :-
   write('  '),
-  drawCell(Cell, Size),
+  drawCell(Cell),
   write('  |'),
-  drawRow(Remainder, Size).
+  drawRow(Remainder).
 
 
 drawUpSeparatorLine(Size) :-
   write('|'),
   drawUpSeparatorLine(Size, Size), nl.
 drawUpSeparatorLine(_, 0).
-drawUpSeparatorLine(Size, Counter) :- 
-  write('     |'), 
+drawUpSeparatorLine(Size, Counter) :-
+  write('     |'),
   NextCounter is Counter - 1,
   drawUpSeparatorLine(Size, NextCounter).
 
@@ -41,8 +41,8 @@ drawDownSeparatorLine(Size) :-
   write('|'),
   drawDownSeparatorLine(Size, Size), nl.
 drawDownSeparatorLine(_, 0).
-drawDownSeparatorLine(Size, Counter) :- 
-  write('_____|'), 
+drawDownSeparatorLine(Size, Counter) :-
+  write('_____|'),
   NextCounter is Counter - 1,
   drawDownSeparatorLine(Size, NextCounter).
 
@@ -58,12 +58,9 @@ drawHeader(Size, Counter) :-
 
 /**
   drawCell/2: Draws a board cell
-    The black cells have the values '0' and 'size - 1'.
+    The black cells have the values '0'.
 **/
-drawCell(0, _) :- 
+drawCell(0) :-
   write('X').
-drawCell(Black2, Size) :- 
-  Black2 is Size - 1,
-  write('X').
-drawCell(Cell, _) :- 
+drawCell(Cell) :-
   write(Cell).

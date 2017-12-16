@@ -1,32 +1,42 @@
 :- use_module(library(clpfd)).
 :- use_module(library(lists)).
 
+:- include('utilities.pl').
+
+%TODO
+applyConstraints(List, Size).
+
 
 initRow(Board, Size, NewBoard) :-
   length(Row, Size),
-  MaxNumber is Size - 1,
+  MaxNumber is Size - 2,
   domain(Row, 0, MaxNumber),
-  all_different(Row),
-  applyBlackConstrain(Row, Size),
+  applyConstraints(Row, Size),
   append(Board, [Row], NewBoard).
+
+
+initColumns(Board, Size) :-
+  initColumns(Board, Size, Size).
+initColumns(_, _, 0).
+initColumns(Board, Size, Counter) :-
+  Counter > 0,
+  getColumn(Board, Counter, Column),
+  applyConstraints(Column, Size),
+  NextCounter is Counter - 1,
+  initColumns(Board, Size, NextCounter).
 
 
 initBoard(Board, Size) :-
   Size > 2,
   initBoard(Board, Size, Size, []).
-initBoard(Board, _, 0, TmpBoard) :- Board = TmpBoard.
+initBoard(Board, Size, 0, TmpBoard) :-
+  Board = TmpBoard,
+  initColumns(Board, Size).
 initBoard(Board, Size, Counter, TmpBoard) :-
   Counter > 0,
   initRow(TmpBoard, Size, NewTmpBoard),
   NextCounter is Counter - 1, !,
   initBoard(Board, Size, NextCounter, NewTmpBoard).
-
-
-applyBlackConstrain(Row, Size) :-
-  element(Black1, Row, 0),
-  Black2Value is Size - 1,
-  element(Black2, Row, Black2Value),
-  Black1 #< Black2.
 
 
 labelBoard([]).
