@@ -3,6 +3,11 @@
 
 
 doppelblock(Size) :-
-  initBoard(Board, Size),
+  initSums(TopSums, LeftSums, Size),
+  initBoard(Board, Size, TopSums, LeftSums),
   labelBoard(Board), 
+  labeling([], TopSums),
+  labeling([], LeftSums),
+  write(TopSums),
+  write(LeftSums),
   drawBoard(Board, Size).
