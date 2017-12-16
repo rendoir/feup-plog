@@ -3,8 +3,11 @@
 
 :- include('utilities.pl').
 
-%TODO
-applyConstraints(List, Size).
+
+applyConstraints(List, Size) :-
+  count(0, List, #=, 2).
+  %delete(List, 0, NonBlack),
+  %all_different(NonBlack).
 
 
 initRow(Board, Size, NewBoard) :-
