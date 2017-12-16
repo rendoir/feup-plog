@@ -3,11 +3,19 @@
 
 :- include('utilities.pl').
 
+getCardinality(Size, Cardinality) :-
+  MaxIterations is Size - 1,
+  getCardinality(MaxIterations, 1, Cardinality, [0-2]).
+getCardinality(Size, Size, Cardinality, Cardinality).
+getCardinality(Size, Counter, Cardinality, Tmp) :-
+  append(Tmp, [Counter-1], NewTmp),
+  NextCounter is Counter + 1, !,
+  getCardinality(Size, NextCounter, Cardinality, NewTmp).
+
 
 applyConstraints(List, Size) :-
-  count(0, List, #=, 2).
-  %delete(List, 0, NonBlack),
-  %all_different(NonBlack).
+  getCardinality(Size, Cardinality),
+  global_cardinality(List, Cardinality).
 
 
 initRow(Board, Size, NewBoard) :-
