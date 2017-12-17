@@ -54,14 +54,9 @@ initBoard(Board, Size, Counter, TmpBoard, TopSums, LeftSums) :-
 
 
 getMaxSum(MaxSum, Size) :-
-  MaxSize is Size - 2,
-  getMaxSum(MaxSum, MaxSize, 0).
-getMaxSum(MaxSum, 0, MaxSum).
-getMaxSum(MaxSum, Counter, Tmp) :-
-  NewTmp is Tmp + Counter,
-  NextCounter is Counter - 1, !,
-  getMaxSum(MaxSum, NextCounter, NewTmp).
-
+  N is Size - 2,
+  SumOfNFirstNumbers is div(N * (N + 1), 2),
+  MaxSum = SumOfNFirstNumbers.
 
 initSums(TopSums, LeftSums, Size) :-
   length(TopSums, Size),
@@ -75,7 +70,7 @@ sumConstraint(Sum, List) :-
   Black2 #> Black1,
   element(Black1, List, 0),
   element(Black2, List, 0),
-  sublist(List, Sublist, Black1, _, Black2),
+  sublist(List, Sublist, Black1, _, Black2), % acho que não podemos usar sublist, porque não me parecer estar preparado para restrições!!
   sum(Sublist, #=, Sum).
 
 
