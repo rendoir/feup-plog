@@ -72,3 +72,10 @@ drawCell(0) :-
   write('X').
 drawCell(Cell) :-
   write(Cell).
+
+
+printUsage :-
+  write('Usage: doppelblock(Size, TopSums, LeftSums).'), nl,
+  write('  Size     - Integer      - The size of the board'), nl,
+  write('  TopSums  - Integer List - The sums on top of the board'), nl,
+  write('  LeftSums - Integer List - The sums on the left of the board'), nl.
