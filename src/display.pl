@@ -5,18 +5,20 @@
 **/
 
 
-drawBoard(Board, Size) :-
-  write(' '), drawHeader(Size), nl,
-  drawBoardRest(Board, Size).
+drawBoard(Board, TopSums, LeftSums, Size) :-
+  write('    '), drawTopSums(TopSums), nl,
+  write('    '), drawHeader(Size), nl,
+  drawBoardRest(Board, LeftSums, Size).
 
 
-drawBoardRest([], _).
-drawBoardRest([Row | Rest], Size) :-
-  drawUpSeparatorLine(Size),
-  write('|'),
+drawBoardRest([], _, _).
+drawBoardRest([Row | Rest], [Sum | OtherSums], Size) :-
+  write(' '), drawUpSeparatorLine(Size),
+  write(Sum),
+  write('  |'),
   drawRow(Row), nl,
-  drawDownSeparatorLine(Size),
-  drawBoardRest(Rest, Size).
+  write(' '), drawDownSeparatorLine(Size),
+  drawBoardRest(Rest, OtherSums, Size).
 
 
 drawRow([]).
@@ -28,7 +30,7 @@ drawRow([Cell | Remainder]) :-
 
 
 drawUpSeparatorLine(Size) :-
-  write('|'),
+  write('  |'),
   drawUpSeparatorLine(Size, Size), nl.
 drawUpSeparatorLine(_, 0).
 drawUpSeparatorLine(Size, Counter) :-
@@ -38,7 +40,7 @@ drawUpSeparatorLine(Size, Counter) :-
 
 
 drawDownSeparatorLine(Size) :-
-  write('|'),
+  write('  |'),
   drawDownSeparatorLine(Size, Size), nl.
 drawDownSeparatorLine(_, 0).
 drawDownSeparatorLine(Size, Counter) :-
@@ -54,6 +56,12 @@ drawHeader(Size, Counter) :-
   write('_____ '),
   NextCounter is Counter - 1,
   drawHeader(Size, NextCounter).
+
+
+drawTopSums([]).
+drawTopSums([Sum | Rest]) :-
+  write('  '), write(Sum), write('   '),
+  drawTopSums(Rest).
 
 
 /**

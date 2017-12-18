@@ -29,7 +29,7 @@ initRow(Board, Size, NewBoard, Sum) :-
 
 initColumns(Board, Size, SumList) :-
   initColumns(Board, Size, 1, SumList).
-initColumns(_, Size, Counter, _) :- 
+initColumns(_, Size, Counter, _) :-
   Size is Counter - 1.
 initColumns(Board, Size, Counter, SumList) :-
   getColumn(Board, Counter, Column),
@@ -58,6 +58,7 @@ getMaxSum(MaxSum, Size) :-
   SumOfNFirstNumbers is div(N * (N + 1), 2),
   MaxSum = SumOfNFirstNumbers.
 
+
 initSums(TopSums, LeftSums, Size) :-
   length(TopSums, Size),
   length(LeftSums, Size),
@@ -66,15 +67,29 @@ initSums(TopSums, LeftSums, Size) :-
   domain(LeftSums, 0, MaxSum).
 
 
+sumBetweenBlack(List, Sum, Black1, Black2) :-
+  Counter #= Black1 + 1,
+  sumBetweenBlack(List, Sum, 0, Black1, Black2, Counter).
+sumBetweenBlack(_, Sum, TmpSum, _, Black2, Counter) :-
+  Sum #= TmpSum,
+  Black2 #= Counter.
+sumBetweenBlack(List, Sum, TmpSum, _, _, Counter) :-
+  element(Counter, List, Element),
+  NewTmpSum #= TmpSum + Element,
+  NewTmpSum #<= Sum,
+  NewCounter #= Counter + 1,
+  sumBetweenBlack(List, Sum, NewTmpSum, _, _, NewCounter).
+
+
 sumConstraint(Sum, List) :-
   Black2 #> Black1,
   element(Black1, List, 0),
   element(Black2, List, 0),
-  sublist(List, Sublist, Black1, _, Black2), % acho que não podemos usar sublist, porque não me parecer estar preparado para restrições!!
-  sum(Sublist, #=, Sum).
+  sumBetweenBlack(List, Sum, Black1, Black2).
 
 
-labelBoard([]).
-labelBoard([Row | Rest]) :-
-  labeling([], Row),
-  labelBoard(Rest).
+label(Board, TopSums, LeftSums) :-
+  flattenBoard(Board, Label),
+  append(Label, TopSums, Label2),
+  append(Label2, LeftSums, Label3),
+  labeling([], Label3).
