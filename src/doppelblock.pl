@@ -5,8 +5,8 @@
 doppelblock(Size, TopSums, LeftSums) :-
   checkArguments(Size, TopSums, LeftSums), !,
   getCardinality(Size, Cardinality), !,
-  initBoard(Board, Size, TopSums, LeftSums, Cardinality),
-  label(Board),
+  initBoard(Board, Size, TopSums, LeftSums, Cardinality), !,
+  label(Board),  
   drawBoard(Board, TopSums, LeftSums, Size).
 doppelblock(_, _, _) :-
   printUsage, !.
