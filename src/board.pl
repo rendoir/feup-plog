@@ -34,7 +34,7 @@ initColumns(Board, Size, Counter, SumList, Cardinality) :-
   getColumn(Board, Counter, Column),
   element(Counter, SumList, Sum),
   applyConstraints(Column, Sum, Cardinality),
-  NextCounter is Counter + 1,
+  NextCounter is Counter + 1, 
   initColumns(Board, Size, NextCounter, SumList, Cardinality).
 
 
@@ -47,28 +47,29 @@ initBoard(Board, Size, Counter, TmpBoard, TopSums, _, Cardinality) :-
 initBoard(Board, Size, Counter, TmpBoard, TopSums, LeftSums,Cardinality) :-
   element(Counter, LeftSums, Sum),
   initRow(TmpBoard, Size, NewTmpBoard, Sum, Cardinality),
-  NextCounter is Counter + 1, !,
+  NextCounter is Counter + 1,
   initBoard(Board, Size, NextCounter, NewTmpBoard, TopSums, LeftSums, Cardinality).
 
 
 sumBetweenBlack(List, Sum, Black1, Black2) :-
   Counter #= Black1 + 1,
   sumBetweenBlack(List, Sum, 0, Black1, Black2, Counter).
-sumBetweenBlack(_, Sum, TmpSum, _, Black2, Counter) :-
-  Sum #= TmpSum,
-  Black2 #= Counter.
-sumBetweenBlack(List, Sum, TmpSum, _, _, Counter) :-
+sumBetweenBlack(List, Sum, TmpSum, _, Black2, Counter) :-
+  Counter #< Black2,
   element(Counter, List, Element),
   NewTmpSum #= TmpSum + Element,
   NewTmpSum #=< Sum,
   NewCounter #= Counter + 1,
   sumBetweenBlack(List, Sum, NewTmpSum, _, _, NewCounter).
+sumBetweenBlack(_, Sum, TmpSum, _, Black2, Counter) :-
+  Sum #= TmpSum,
+  Black2 #= Counter.
 
 
 sumConstraint(Sum, List) :-
-  Black2 #> Black1,
   element(Black1, List, 0),
   element(Black2, List, 0),
+  Black2 #> Black1,
   sumBetweenBlack(List, Sum, Black1, Black2).
 
 
