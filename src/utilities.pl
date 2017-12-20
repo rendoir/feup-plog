@@ -1,12 +1,7 @@
-getColumn(Board, ColumnNumber, Column) :-
-  getColumn(Board, ColumnNumber, Column, []).
-getColumn([], _, Column, TmpColumn) :-
-  Column = TmpColumn.
-getColumn([Row | Rest], ColumnNumber, Column, TmpColumn) :-
-  element(ColumnNumber, Row, Element),
-  append(TmpColumn, [Element], NewTmpColumn), !,
-  getColumn(Rest, ColumnNumber, Column, NewTmpColumn).
 
+label(Board) :-
+  flattenBoard(Board, Label),!,
+  labeling([], Label).
 
 flattenBoard(Board, Flat) :-
   flattenBoard(Board, Flat, []).
@@ -15,8 +10,8 @@ flattenBoard([Row | Rest], Flat, TmpFlat) :-
   append(TmpFlat, Row, NewTmpFlat),
   flattenBoard(Rest, Flat, NewTmpFlat).
 
-
 checkArguments(Size, TopSums, LeftSums) :-
-  Size > 1,
   length(TopSums, Size),
-  length(LeftSums, Size).
+  length(LeftSums, Size),
+  Size > 1.
+

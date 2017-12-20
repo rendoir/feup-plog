@@ -6,18 +6,19 @@
 
 
 drawBoard(Board, TopSums, LeftSums, Size) :-
-  write('    '), drawTopSums(TopSums), nl,
-  write('    '), drawHeader(Size), nl,
-  drawBoardRest(Board, LeftSums, Size).
+  write('   '), drawTopSums(TopSums), nl,
+  write('   '), drawHeader(Size), nl,
+  drawBoardRest(Board, LeftSums, Size), !.
 
 
 drawBoardRest([], _, _).
 drawBoardRest([Row | Rest], [Sum | OtherSums], Size) :-
-  write(' '), drawUpSeparatorLine(Size),
-  write(Sum),
+  drawUpSeparatorLine(Size),
   write('  |'),
-  drawRow(Row), nl,
-  write(' '), drawDownSeparatorLine(Size),
+  drawRow(Row), 
+  write(' '),
+  write(Sum), nl,
+  drawDownSeparatorLine(Size),
   drawBoardRest(Rest, OtherSums, Size).
 
 
@@ -75,7 +76,7 @@ drawCell(Cell) :-
 
 
 printUsage :-
-  write('Usage: doppelblock(Size, TopSums, LeftSums).'), nl,
-  write('  Size     - Integer      - The size of the board'), nl,
+  write('Usage: doppelblock(+TopSums, +LeftSums, -Board).'), nl,
   write('  TopSums  - Integer List - The sums on top of the board'), nl,
-  write('  LeftSums - Integer List - The sums on the left of the board'), nl.
+  write('  LeftSums - Integer List - The sums on the left of the board'), nl,
+  write('  Board    - Integer List - The return solution'), nl.
