@@ -38,7 +38,7 @@ applySumsConstrains([BoardH|BoardT], [SumH|SumT]) :-
   applySumsConstrains(BoardT, SumT).
 
 sumBetweenBlack(List, Sum, Black1, Black2) :-
-  Counter #= Black1 + 1,
+  Counter #= Black1 + 1,!,
   sumBetweenBlack(List, Sum, 0, Black1, Black2, Counter).
 sumBetweenBlack(_, Sum, TmpSum, _, Black2, Counter) :-
   Sum #= TmpSum,
@@ -47,7 +47,7 @@ sumBetweenBlack(List, Sum, TmpSum, Black1, Black2, Counter) :-
   element(Counter, List, Element),
   NewTmpSum #= TmpSum + Element,
   NewTmpSum #=< Sum,
-  NewCounter #= Counter + 1,
+  NewCounter #= Counter + 1, !,
   sumBetweenBlack(List, Sum, NewTmpSum, Black1, Black2, NewCounter).
 
 sumConstraint(List, Sum) :-
