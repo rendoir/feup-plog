@@ -3,6 +3,10 @@ label(Board) :-
   flattenBoard(Board, Label),!,
   labeling([], Label).
 
+label(Board, LabelingOptions) :-
+  flattenBoard(Board, Label),!,
+  labeling(LabelingOptions, Label).
+
 flattenBoard(Board, Flat) :-
   flattenBoard(Board, Flat, []).
 flattenBoard([], Flat, Flat).

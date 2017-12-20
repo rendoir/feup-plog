@@ -76,7 +76,9 @@ drawCell(Cell) :-
 
 
 printUsage :-
-  write('Usage: doppelblock(+TopSums, +LeftSums, -Board).'), nl,
-  write('  TopSums  - Integer List - The sums on top of the board'), nl,
-  write('  LeftSums - Integer List - The sums on the left of the board'), nl,
-  write('  Board    - Integer List - The return solution'), nl.
+  write('Usage: doppelblock(?Size, ?TopSums, ?LeftSums, ?Board, (Optinal) +LabelingOptions).'), nl,
+  write('  Size            - Integer      - The Size of the Board'), nl,
+  write('  TopSums         - Integer List - The sums on top of the board'), nl,
+  write('  LeftSums        - Integer List - The sums on the left of the board'), nl,
+  write('  Board           - Integer List - The Board correspondent to the sums'), nl,
+  write('  LabelingOptions - Integer List - Optins to labeling the variables'), nl.
