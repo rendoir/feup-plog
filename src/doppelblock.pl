@@ -14,8 +14,8 @@ doppelblock(Size, TopSums, LeftSums, Board) :- !,
   label(Board),
   statistics(runtime, [T1|_]),
   ElapsedTime is T1 - T0,
-  format('Solution found in: ~3d seconds', [ElapsedTime]), nl,
-  drawBoard(Board, TopSums, LeftSums, Size).
+  format(':~3d seconds', [ElapsedTime]), nl.
+  %drawBoard(Board, TopSums, LeftSums, Size).
 doppelblock(_, _, _, _) :-
   printUsage, !.
 
@@ -46,3 +46,18 @@ printAllSolutions(OutputFile, Time, R, [Size, TopSums, LeftSums, Board]) :-
 printAllSolutions(Time, R, [Size, TopSums, LeftSums, Board]) :-
   time_out((doppelblock(Size, TopSums, LeftSums, Board), fail), Time, R).
 printAllSolutions(_, _, _).
+
+printTimes(OutputFile, MaxSize) :-
+  open(OutputFile, write, X),
+  current_output(CO),
+  set_output(X),
+  printTimes(MaxSize),
+  close(X),
+  set_output(CO).
+
+printTimes(1).
+printTimes(Size) :-
+  write(Size),
+  doppelblock(Size, _, _, _),
+  NextSize is Size - 1,
+  printTimes(NextSize).
