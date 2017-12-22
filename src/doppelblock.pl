@@ -50,6 +50,7 @@ doppelblock(Size, TopSums, RightSums, Board, LabelingOptions) :- !,
   statistics(runtime, [T1|_]),
   ElapsedTime is T1 - T0,
   format('Solution found in: ~3d seconds', [ElapsedTime]), nl,
+  fd_statistics,
   drawBoard(Board, TopSums, RightSums, Size).
 doppelblock(_, _, _, _, _) :-
   printUsage, !.

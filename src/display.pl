@@ -23,7 +23,7 @@ drawBoard([Row | Rest], [Sum | OtherSums], Size) :-
   drawUpSeparatorLine(Size),
   write('  |'),
   drawRow(Row), 
-  write(' '),
+  write('  '),
   write(Sum), nl,
   drawDownSeparatorLine(Size),
   drawBoard(Rest, OtherSums, Size).
