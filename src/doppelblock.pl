@@ -39,7 +39,7 @@ doppelblock(_, _, _, _) :-
     Example: doppelblock(6, [4,8,4,5,6,5], [9,7,2,10,3,1], Board, [ffc]).
 */
 doppelblock(Size, TopSums, RightSums, Board, LabelingOptions) :- !,
-  statistics(runtime, [T0|_]),
+  statistics(walltime, [T0|_]),
   checkArguments(Size, TopSums, RightSums),
   initBoard(Board, Size),
   transpose(Board, TransposeBoard),
@@ -47,9 +47,9 @@ doppelblock(Size, TopSums, RightSums, Board, LabelingOptions) :- !,
   applySumsConstrains(Board, RightSums),
   applySumsConstrains(TransposeBoard, TopSums),
   label(Board, LabelingOptions),
-  statistics(runtime, [T1|_]),
+  statistics(walltime, [T1|_]),
   ElapsedTime is T1 - T0,
-  format('Solution found in: ~3d seconds', [ElapsedTime]), nl,
+  format('Solution found in: ~6d seconds', [ElapsedTime]), nl,
   fd_statistics,
   drawBoard(Board, TopSums, RightSums, Size).
 doppelblock(_, _, _, _, _) :-
